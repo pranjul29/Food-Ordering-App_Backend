@@ -9,7 +9,6 @@ import com.upgrad.FoodOrderingApp.service.exception.AuthorizationFailedException
 import com.upgrad.FoodOrderingApp.service.exception.SignUpRestrictedException;
 import com.upgrad.FoodOrderingApp.service.exception.UpdateCustomerException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -46,7 +45,7 @@ public class CustomerController {
 
     @RequestMapping(method = RequestMethod.POST, path = "/customer/login", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<LoginResponse> login(@RequestHeader("authorization") final String authorization) throws AuthenticationFailedException {
-        byte[] decode = Base64.getDecoder().decode(authorization.split("Basic ")[1]);
+        byte[] decode = Base64.getDecoder().decode(authorization);
         String decodedText = new String(decode);
         String[] decodedArray = decodedText.split(":");
         if(decodedArray.length != 2)
@@ -76,17 +75,20 @@ public class CustomerController {
 
     @RequestMapping(method = RequestMethod.PUT, path = "/customer", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<UpdateCustomerResponse> update(@RequestHeader("authorization") final String accessToken, UpdateCustomerRequest updateCustomerRequest) throws UpdateCustomerException, AuthorizationFailedException {
+        CustomerEntity customerEntity = customerService.getCustomer(accessToken);
         String firstname = updateCustomerRequest.getFirstName();
+        if(firstname == null)
+            throw new UpdateCustomerException("UCR-002", "First name field should not be empty");
         String lastname = updateCustomerRequest.getLastName();
+        customerEntity.setFirstName(firstname);
+        if(lastname != null) {
+            customerEntity.setLastName(lastname);
+        }
 
-        String[] s = accessToken.split("\\s+");
-        // Fetch Customer using AccessToken and Update Firstname and LastName in that Customer using getCustomer Function
+        CustomerEntity finalCustomerEntity = customerService.updateCustomer(customerEntity);
 
-        CustomerAuthEntity customerAuthEntity = customerService.updateCustomer(s[1], firstname, lastname);
-        CustomerEntity customerEntity = customerAuthEntity.getCustomer();
-
-        UpdateCustomerResponse updateCustomerResponse = new UpdateCustomerResponse().id(customerEntity.getUuid())
-                .firstName(customerEntity.getFirstName()).lastName(customerEntity.getLastName()).status("CUSTOMER DETAILS UPDATED SUCCESSFULLY");
+        UpdateCustomerResponse updateCustomerResponse = new UpdateCustomerResponse().id(finalCustomerEntity.getUuid())
+                .firstName(finalCustomerEntity.getFirstName()).lastName(finalCustomerEntity.getLastName()).status("CUSTOMER DETAILS UPDATED SUCCESSFULLY");
 
         return new ResponseEntity<>(updateCustomerResponse, HttpStatus.OK);
     }
@@ -96,10 +98,11 @@ public class CustomerController {
         String oldPassword = updatePasswordRequest.getOldPassword();
         String newPassword = updatePasswordRequest.getNewPassword();
 
-        CustomerAuthEntity customerAuthEntity = customerService.updateCustomerPassword(accessToken, oldPassword, newPassword);
-        CustomerEntity customerEntity = customerAuthEntity.getCustomer();
+        CustomerEntity customerEntity = customerService.getCustomer(accessToken);
 
-        UpdatePasswordResponse updatePasswordResponse = new UpdatePasswordResponse().id(customerEntity.getUuid()).status("CUSTOMER PASSWORD UPDATED SUCCESSFULLY");
+        CustomerEntity finalCustomerEntity = customerService.updateCustomerPassword(oldPassword, newPassword, customerEntity);
+
+        UpdatePasswordResponse updatePasswordResponse = new UpdatePasswordResponse().id(finalCustomerEntity.getUuid()).status("CUSTOMER PASSWORD UPDATED SUCCESSFULLY");
         return new ResponseEntity<UpdatePasswordResponse>(updatePasswordResponse, HttpStatus.OK);
     }
 
