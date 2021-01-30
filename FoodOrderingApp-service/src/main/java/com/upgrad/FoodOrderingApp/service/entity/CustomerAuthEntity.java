@@ -9,7 +9,7 @@ import java.time.ZonedDateTime;
 @Table(name = "customer_auth")
 @NamedQueries({
         @NamedQuery( name = "customerAuthByAccessToken", query = "select c from CustomerAuthEntity c where c.accessToken = :accessToken" ),
-        @NamedQuery( name = "customerAuthByCustomerId", query = "select c from CustomerAuthEntity c where c.user.id = :customerId")
+        @NamedQuery( name = "customerAuthByCustomerId", query = "select c from CustomerAuthEntity c where c.customerEntity.id = :customerId")
 })
 public class CustomerAuthEntity {
 
@@ -24,7 +24,7 @@ public class CustomerAuthEntity {
 
     @ManyToOne
     @JoinColumn(name = "CUSTOMER_ID")
-    private CustomerEntity user;
+    private CustomerEntity customerEntity;
 
     @Column(name = "ACCESS_TOKEN")
     @NotNull
@@ -58,12 +58,12 @@ public class CustomerAuthEntity {
         this.uuid = uuid;
     }
 
-    public CustomerEntity getUser() {
-        return user;
+    public CustomerEntity getCustomer() {
+        return customerEntity;
     }
 
-    public void setUser(CustomerEntity user) {
-        this.user = user;
+    public void setCustomer(CustomerEntity user) {
+        this.customerEntity = user;
     }
 
     public String getAccessToken() {
@@ -97,4 +97,5 @@ public class CustomerAuthEntity {
     public void setLogoutAt(ZonedDateTime logoutAt) {
         this.logoutAt = logoutAt;
     }
+
 }

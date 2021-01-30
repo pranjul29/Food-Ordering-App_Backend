@@ -22,12 +22,12 @@ public class CustomerEntity {
     @Column(name = "FIRSTNAME")
     @NotNull
     @Size(max = 30)
-    private String firstname;
+    private String firstName;
 
     @Column(name = "LASTNAME")
     @NotNull
     @Size(max = 30)
-    private String lastname;
+    private String lastName;
 
     @Column(name = "EMAIL")
     @NotNull
@@ -65,20 +65,20 @@ public class CustomerEntity {
         this.uuid = uuid;
     }
 
-    public String getFirstname() {
-        return firstname;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getLastname() {
-        return lastname;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getEmail() {
