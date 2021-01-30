@@ -1,7 +1,7 @@
 package com.upgrad.FoodOrderingApp.api.controller;
 
 import com.upgrad.FoodOrderingApp.api.model.*;
-import com.upgrad.FoodOrderingApp.service.businness.CustomerBusinessService;
+import com.upgrad.FoodOrderingApp.service.businness.CustomerService;
 import com.upgrad.FoodOrderingApp.service.entity.CustomerAuthEntity;
 import com.upgrad.FoodOrderingApp.service.entity.CustomerEntity;
 import com.upgrad.FoodOrderingApp.service.exception.AuthenticationFailedException;
@@ -24,7 +24,7 @@ import java.util.UUID;
 public class CustomerController {
 
     @Autowired
-    private CustomerBusinessService customerBusinessService;
+    private CustomerService customerService;
 
     @RequestMapping(method = RequestMethod.POST, path = "/customer/signup", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<SignupCustomerResponse> signup(final SignupCustomerRequest signupCustomerRequest) throws SignUpRestrictedException {
@@ -37,7 +37,7 @@ public class CustomerController {
         customerEntity.setEmail(signupCustomerRequest.getEmailAddress());
         customerEntity.setPassword(signupCustomerRequest.getPassword());
 
-        final CustomerEntity createdCustomerEntity = customerBusinessService.signup(customerEntity);
+        final CustomerEntity createdCustomerEntity = customerService.signup(customerEntity);
         SignupCustomerResponse signupCustomerResponse = new SignupCustomerResponse().id(createdCustomerEntity.getUuid()).status("CUSTOMER SUCCESSFULLY REGISTERED");
 
         return new ResponseEntity<SignupCustomerResponse>(signupCustomerResponse, HttpStatus.CREATED);
@@ -50,7 +50,7 @@ public class CustomerController {
         String[] decodedArray = decodedText.split(":");
         if(decodedArray.length != 2)
             throw new AuthenticationFailedException("ATH-003", "Incorrect format of decoded customer name and password");
-        CustomerAuthEntity customerAuthEntity = customerBusinessService.login(decodedArray[0], decodedArray[1]);
+        CustomerAuthEntity customerAuthEntity = customerService.login(decodedArray[0], decodedArray[1]);
         CustomerEntity customerEntity = customerAuthEntity.getUser();
 
         LoginResponse loginResponse = new LoginResponse().id(customerEntity.getUuid()).message("LOGGED IN SUCCESSFULLY").firstName(customerEntity.getFirstname())
@@ -65,7 +65,7 @@ public class CustomerController {
 
     @RequestMapping(method = RequestMethod.POST, path = "/customer/logout", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<LogoutResponse> logout(@RequestHeader("accessToken") final String accessToken) throws AuthorizationFailedException {
-        CustomerAuthEntity customerAuthEntity = customerBusinessService.signout(accessToken);
+        CustomerAuthEntity customerAuthEntity = customerService.signout(accessToken);
         CustomerEntity customerEntity = customerAuthEntity.getUser();
 
         LogoutResponse logoutResponse = new LogoutResponse().id(customerEntity.getUuid()).message("LOGGED OUT SUCCESSFULLY");
@@ -79,7 +79,7 @@ public class CustomerController {
         String lastname = updateCustomerRequest.getLastName();
 
         String[] s = accessToken.split("\\s+");
-        CustomerAuthEntity customerAuthEntity = customerBusinessService.update(s[1], firstname, lastname);
+        CustomerAuthEntity customerAuthEntity = customerService.update(s[1], firstname, lastname);
         CustomerEntity customerEntity = customerAuthEntity.getUser();
 
         UpdateCustomerResponse updateCustomerResponse = new UpdateCustomerResponse().id(customerEntity.getUuid())
@@ -93,7 +93,7 @@ public class CustomerController {
         String oldPassword = updatePasswordRequest.getOldPassword();
         String newPassword = updatePasswordRequest.getNewPassword();
 
-        CustomerAuthEntity customerAuthEntity = customerBusinessService.updatePassword(accessToken, oldPassword, newPassword);
+        CustomerAuthEntity customerAuthEntity = customerService.updatePassword(accessToken, oldPassword, newPassword);
         CustomerEntity customerEntity = customerAuthEntity.getUser();
 
         UpdatePasswordResponse updatePasswordResponse = new UpdatePasswordResponse().id(customerEntity.getUuid()).status("CUSTOMER PASSWORD UPDATED SUCCESSFULLY");

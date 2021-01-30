@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.ZonedDateTime;
 
 @Service
-public class CustomerBusinessService {
+public class CustomerService {
 
     @Autowired
     private CustomerDao customerDao;
