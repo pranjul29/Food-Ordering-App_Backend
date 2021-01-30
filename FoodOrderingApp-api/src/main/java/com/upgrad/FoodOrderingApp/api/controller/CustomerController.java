@@ -45,20 +45,19 @@ public class CustomerController {
 
     @RequestMapping(method = RequestMethod.POST, path = "/customer/login", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<LoginResponse> login(@RequestHeader("authorization") final String authorization) throws AuthenticationFailedException {
-        byte[] decode = Base64.getDecoder().decode(authorization);
+        byte[] decode = Base64.getDecoder().decode(authorization.split("Basic ")[1]);
         String decodedText = new String(decode);
         String[] decodedArray = decodedText.split(":");
         if(decodedArray.length != 2)
             throw new AuthenticationFailedException("ATH-003", "Incorrect format of decoded customer name and password");
         CustomerAuthEntity customerAuthEntity = customerService.authenticate(decodedArray[0], decodedArray[1]);
         CustomerEntity customerEntity = customerAuthEntity.getCustomer();
-
         LoginResponse loginResponse = new LoginResponse().id(customerEntity.getUuid()).message("LOGGED IN SUCCESSFULLY").firstName(customerEntity.getFirstName())
                 .lastName(customerEntity.getLastName()).emailAddress(customerEntity.getEmail()).contactNumber(customerEntity.getContact_number());
-
+        System.out.println(customerAuthEntity.getLoginAt());
+        System.out.println(customerAuthEntity.getAccessToken());
         HttpHeaders headers = new HttpHeaders();
         headers.add("access-control-expose-headers", "access-token");
-        headers.add("date", customerAuthEntity.getLoginAt().toString());
         headers.add("access-token", customerAuthEntity.getAccessToken());
         return new ResponseEntity<LoginResponse>(loginResponse, headers, HttpStatus.OK);
     }
@@ -74,7 +73,8 @@ public class CustomerController {
     }
 
     @RequestMapping(method = RequestMethod.PUT, path = "/customer", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<UpdateCustomerResponse> update(@RequestHeader("authorization") final String accessToken, UpdateCustomerRequest updateCustomerRequest) throws UpdateCustomerException, AuthorizationFailedException {
+    public ResponseEntity<UpdateCustomerResponse> update(@RequestHeader("authorization") final String authorization, UpdateCustomerRequest updateCustomerRequest) throws UpdateCustomerException, AuthorizationFailedException {
+        String accessToken = authorization.split("Bearer ")[1];
         CustomerEntity customerEntity = customerService.getCustomer(accessToken);
         String firstname = updateCustomerRequest.getFirstName();
         if(firstname == null)
@@ -94,14 +94,13 @@ public class CustomerController {
     }
 
     @RequestMapping(method = RequestMethod.PUT, path = "/customer/password", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<UpdatePasswordResponse> changePassword(@RequestHeader("authorization") final String accessToken, final UpdatePasswordRequest updatePasswordRequest) throws AuthorizationFailedException, UpdateCustomerException {
+    public ResponseEntity<UpdatePasswordResponse> changePassword(@RequestHeader("authorization") final String authorization, final UpdatePasswordRequest updatePasswordRequest) throws AuthorizationFailedException, UpdateCustomerException {
         String oldPassword = updatePasswordRequest.getOldPassword();
         String newPassword = updatePasswordRequest.getNewPassword();
 
+        String accessToken = authorization.split("Bearer ")[1];
         CustomerEntity customerEntity = customerService.getCustomer(accessToken);
-
         CustomerEntity finalCustomerEntity = customerService.updateCustomerPassword(oldPassword, newPassword, customerEntity);
-
         UpdatePasswordResponse updatePasswordResponse = new UpdatePasswordResponse().id(finalCustomerEntity.getUuid()).status("CUSTOMER PASSWORD UPDATED SUCCESSFULLY");
         return new ResponseEntity<UpdatePasswordResponse>(updatePasswordResponse, HttpStatus.OK);
     }
