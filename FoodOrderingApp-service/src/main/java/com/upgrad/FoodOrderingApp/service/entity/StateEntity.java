@@ -16,6 +16,7 @@ public class StateEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+
     @Column(name = "UUID")
     @NotNull
     @Size(max = 200)
@@ -25,6 +26,14 @@ public class StateEntity {
     @NotNull
     @Size(max = 30)
     private String state_name;
+
+    public StateEntity() {
+    }
+
+    public StateEntity(@NotNull @Size(max = 200) String uuid, @NotNull @Size(max = 30) String state_name) {
+        this.uuid = uuid;
+        this.state_name = state_name;
+    }
 
     public Integer getId() {
         return id;

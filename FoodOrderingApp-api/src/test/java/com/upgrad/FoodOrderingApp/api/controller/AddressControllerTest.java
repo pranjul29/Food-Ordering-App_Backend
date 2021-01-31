@@ -309,94 +309,94 @@ public class AddressControllerTest {
     // ------------------------------------------ GET /address/customer ------------------------------------------
 
     //This test case passes when you are able to retrieve all the saved address of a customer.
-//    @Test
-//    public void shouldGetAllAddresses() throws Exception {
-//        final CustomerEntity customerEntity = new CustomerEntity();
-//        when(mockCustomerService.getCustomer("database_accesstoken2")).thenReturn(customerEntity);
-//
-//        final AddressEntity addressEntity = new AddressEntity();
-//        final String addressUuid = UUID.randomUUID().toString();
-//        addressEntity.setUuid(addressUuid);
-//        addressEntity.setPincode("100000");
-//        addressEntity.setCity("city");
-//        addressEntity.setLocality("locality");
-//        addressEntity.setFlatBuilNo("flatBuildNo");
-//        final String stateUuid = UUID.randomUUID().toString();
-//        addressEntity.setState(new StateEntity(stateUuid, "state"));
-//        when(mockAddressService.getAllAddress(customerEntity)).thenReturn(Collections.singletonList(addressEntity));
-//
-//        final String response = mockMvc
-//                .perform(get("/address/customer")
-//                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-//                        .header("authorization", "Bearer database_accesstoken2"))
-//                .andExpect(status().isOk())
-//                .andReturn().getResponse().getContentAsString();
-//
-//        final AddressListResponse addressLists = new ObjectMapper().readValue(response, AddressListResponse.class);
-//        assertEquals(addressLists.getAddresses().size(), 1);
-//
-//        final AddressList addressList = addressLists.getAddresses().get(0);
-//        assertEquals(addressList.getFlatBuildingName(), "flatBuildNo");
-//        assertEquals(addressList.getLocality(), "locality");
-//        assertEquals(addressList.getPincode(), "100000");
-//        assertEquals(addressList.getCity(), "city");
-//        assertEquals(addressList.getState().getId().toString(), stateUuid);
-//        assertEquals(addressList.getState().getStateName(), "state");
-//        assertEquals(addressList.getId().toString(), addressUuid);
-//
-//        verify(mockCustomerService, times(1)).getCustomer("database_accesstoken2");
-//        verify(mockAddressService, times(1)).getAllAddress(customerEntity);
-//    }
+    @Test
+    public void shouldGetAllAddresses() throws Exception {
+        final CustomerEntity customerEntity = new CustomerEntity();
+        when(mockCustomerService.getCustomer("database_accesstoken2")).thenReturn(customerEntity);
+
+        final AddressEntity addressEntity = new AddressEntity();
+        final String addressUuid = UUID.randomUUID().toString();
+        addressEntity.setUuid(addressUuid);
+        addressEntity.setPincode("100000");
+        addressEntity.setCity("city");
+        addressEntity.setLocality("locality");
+        addressEntity.setFlatBuilNo("flatBuildNo");
+        final String stateUuid = UUID.randomUUID().toString();
+        addressEntity.setState(new StateEntity(stateUuid, "state"));
+        when(mockAddressService.getAllAddress(customerEntity)).thenReturn(Collections.singletonList(addressEntity));
+
+        final String response = mockMvc
+                .perform(get("/address/customer")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                        .header("authorization", "Bearer database_accesstoken2"))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+
+        final AddressListResponse addressLists = new ObjectMapper().readValue(response, AddressListResponse.class);
+        assertEquals(addressLists.getAddresses().size(), 1);
+
+        final AddressList addressList = addressLists.getAddresses().get(0);
+        assertEquals(addressList.getFlatBuildingName(), "flatBuildNo");
+        assertEquals(addressList.getLocality(), "locality");
+        assertEquals(addressList.getPincode(), "100000");
+        assertEquals(addressList.getCity(), "city");
+        assertEquals(addressList.getState().getId().toString(), stateUuid);
+        assertEquals(addressList.getState().getStateName(), "state");
+        assertEquals(addressList.getId().toString(), addressUuid);
+
+        verify(mockCustomerService, times(1)).getCustomer("database_accesstoken2");
+        verify(mockAddressService, times(1)).getAllAddress(customerEntity);
+    }
 //
 //    //This test case passes when you have handled the exception of trying to fetch addresses for any customer with non existing access-token.
-//    @Test
-//    public void shouldNotGetAllAddressesWithNonExistingAccessToken() throws Exception {
-//        when(mockCustomerService.getCustomer("non_existing_access_token"))
-//                .thenThrow(new AuthorizationFailedException("ATHR-001", "Customer is not Logged in."));
-//
-//        mockMvc
-//                .perform(get("/address/customer")
-//                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-//                        .header("authorization", "Bearer non_existing_access_token"))
-//                .andExpect(status().isForbidden())
-//                .andExpect(jsonPath("code").value("ATHR-001"));
-//        verify(mockCustomerService, times(1)).getCustomer("non_existing_access_token");
-//        verify(mockAddressService, times(0)).getAllAddress(any());
-//    }
+    @Test
+    public void shouldNotGetAllAddressesWithNonExistingAccessToken() throws Exception {
+        when(mockCustomerService.getCustomer("non_existing_access_token"))
+                .thenThrow(new AuthorizationFailedException("ATHR-001", "Customer is not Logged in."));
+
+        mockMvc
+                .perform(get("/address/customer")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                        .header("authorization", "Bearer non_existing_access_token"))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("code").value("ATHR-001"));
+        verify(mockCustomerService, times(1)).getCustomer("non_existing_access_token");
+        verify(mockAddressService, times(0)).getAllAddress(any());
+    }
 //
 //    //This test case passes when you have handled the exception of trying to fetch addresses for any customer with while
 //    // the customer is currently signed out.
-//    @Test
-//    public void shouldNotGetAllAddressesWithSignedOutUser() throws Exception {
-//        when(mockCustomerService.getCustomer("database_accesstoken"))
-//                .thenThrow(new AuthorizationFailedException("ATHR-002", "Customer is logged out. Log in again to access this endpoint."));
-//
-//        mockMvc
-//                .perform(get("/address/customer")
-//                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-//                        .header("authorization", "Bearer database_accesstoken"))
-//                .andExpect(status().isForbidden())
-//                .andExpect(jsonPath("code").value("ATHR-002"));
-//        verify(mockCustomerService, times(1)).getCustomer("database_accesstoken");
-//        verify(mockAddressService, times(0)).getAllAddress(any());
-//    }
+    @Test
+    public void shouldNotGetAllAddressesWithSignedOutUser() throws Exception {
+        when(mockCustomerService.getCustomer("database_accesstoken"))
+                .thenThrow(new AuthorizationFailedException("ATHR-002", "Customer is logged out. Log in again to access this endpoint."));
+
+        mockMvc
+                .perform(get("/address/customer")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                        .header("authorization", "Bearer database_accesstoken"))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("code").value("ATHR-002"));
+        verify(mockCustomerService, times(1)).getCustomer("database_accesstoken");
+        verify(mockAddressService, times(0)).getAllAddress(any());
+    }
 //
 //    //This test case passes when you have handled the exception of trying to fetch addresses for any customer while
 //    // the session of that customer is already expired.
-//    @Test
-//    public void shouldNotGetAllAddressesWithExpiredSessionUser() throws Exception {
-//        when(mockCustomerService.getCustomer("database_accesstoken1"))
-//                .thenThrow(new AuthorizationFailedException("ATHR-003", "Your session is expired. Log in again to access this endpoint."));
-//
-//        mockMvc
-//                .perform(delete("/address/customer")
-//                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-//                        .header("authorization", "Bearer database_accesstoken1"))
-//                .andExpect(status().isForbidden())
-//                .andExpect(jsonPath("code").value("ATHR-003"));
-//        verify(mockCustomerService, times(1)).getCustomer("database_accesstoken1");
-//        verify(mockAddressService, times(0)).getAllAddress(any());
-//    }
+    @Test
+    public void shouldNotGetAllAddressesWithExpiredSessionUser() throws Exception {
+        when(mockCustomerService.getCustomer("database_accesstoken1"))
+                .thenThrow(new AuthorizationFailedException("ATHR-003", "Your session is expired. Log in again to access this endpoint."));
+
+        mockMvc
+                .perform(delete("/address/customer")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                        .header("authorization", "Bearer database_accesstoken1"))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("code").value("ATHR-003"));
+        verify(mockCustomerService, times(1)).getCustomer("database_accesstoken1");
+        verify(mockAddressService, times(0)).getAllAddress(any());
+    }
 
     // ------------------------------------------ GET /states ------------------------------------------
 

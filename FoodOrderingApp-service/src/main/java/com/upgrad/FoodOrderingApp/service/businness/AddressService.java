@@ -1,6 +1,8 @@
 package com.upgrad.FoodOrderingApp.service.businness;
 
 import com.upgrad.FoodOrderingApp.service.dao.AddressDao;
+import com.upgrad.FoodOrderingApp.service.dao.CustomerAddressDao;
+import com.upgrad.FoodOrderingApp.service.dao.StateDao;
 import com.upgrad.FoodOrderingApp.service.entity.AddressEntity;
 import com.upgrad.FoodOrderingApp.service.entity.CustomerAddressEntity;
 import com.upgrad.FoodOrderingApp.service.entity.CustomerEntity;
@@ -12,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,6 +26,12 @@ public class AddressService {
 
     @Autowired
     private AddressDao addressDao;
+
+    @Autowired
+    private StateDao stateDao;
+
+    @Autowired
+    private CustomerAddressDao customerAddressDao;
 
     public static boolean isValidPinCode(String pinCode)
     {
@@ -39,7 +49,7 @@ public class AddressService {
 
         if(stateUUID == null)
             throw new SaveAddressException("SAR-001","No field can be empty");
-        StateEntity stateEntity = addressDao.getStateByUUID(stateUUID);
+        StateEntity stateEntity = stateDao.getStateByUUID(stateUUID);
         if(stateEntity == null)
             throw new AddressNotFoundException("ANF-002","No state by this id");
 
@@ -48,7 +58,7 @@ public class AddressService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public AddressEntity saveAddress(AddressEntity addressEntity, CustomerEntity customerEntity) throws SaveAddressException {
-        if(addressEntity.getCity() == null || addressEntity.getFlat_buil_number() == null || addressEntity. getLocality() == null || addressEntity.getPincode() == null || addressEntity.getStateEntity() == null)
+        if(addressEntity.getCity() == null || addressEntity.getFlatBuilNo() == null || addressEntity. getLocality() == null || addressEntity.getPincode() == null || addressEntity.getState() == null)
             throw new SaveAddressException("SAR-001","No field can be empty");
         else if(isValidPinCode(addressEntity.getPincode()) == false)
             throw new SaveAddressException("SAR-002","Invalid pincode");
@@ -61,5 +71,18 @@ public class AddressService {
         customerAddressEntity.setAddressEntity(newAddressEntity);
         CustomerAddressEntity newCustomerAddressEntity = addressDao.saveCustomerAddress(customerAddressEntity);
         return newAddressEntity;
+    }
+
+    public List<AddressEntity> getAllAddress(CustomerEntity customerEntity){
+
+        List<AddressEntity> addressEntities = new ArrayList<>();
+        List<CustomerAddressEntity> customerAddressEntities = customerAddressDao.getAllAddressByCustomer(customerEntity);
+
+        if(customerAddressEntities!=null)
+            customerAddressEntities.forEach(customerAddressEntity -> {
+                addressEntities.add(customerAddressEntity.getAddressEntity());
+            });
+
+        return addressEntities;
     }
 }
