@@ -76,112 +76,112 @@ public class AddressControllerTest {
     }
 //
 //    //This test case passes when you have handled the exception of trying to save an address with non existing access-token.
-//    @Test
-//    public void shouldNotSaveAddressWithNonExistingAccessToken() throws Exception {
-//        when(mockCustomerService.getCustomer("non_existing_access_token"))
-//                .thenThrow(new AuthorizationFailedException("ATHR-001", "Customer is not Logged in."));
-//
-//        mockMvc
-//                .perform(post("/address?content=my_address")
-//                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-//                        .header("authorization", "Bearer non_existing_access_token"))
-//                .andExpect(status().isForbidden())
-//                .andExpect(jsonPath("code").value("ATHR-001"));
-//        verify(mockCustomerService, times(1)).getCustomer("non_existing_access_token");
-//        verify(mockAddressService, times(0)).getStateByUUID(anyString());
-//        verify(mockAddressService, times(0)).saveAddress(any(), any());
-//    }
+    @Test
+    public void shouldNotSaveAddressWithNonExistingAccessToken() throws Exception {
+        when(mockCustomerService.getCustomer("non_existing_access_token"))
+                .thenThrow(new AuthorizationFailedException("ATHR-001", "Customer is not Logged in."));
+
+        mockMvc
+                .perform(post("/address?content=my_address")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                        .header("authorization", "Bearer non_existing_access_token"))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("code").value("ATHR-001"));
+        verify(mockCustomerService, times(1)).getCustomer("non_existing_access_token");
+        verify(mockAddressService, times(0)).getStateByUUID(anyString());
+        verify(mockAddressService, times(0)).saveAddress(any(), any());
+    }
 //
 //    //This test case passes when you have handled the exception of trying to save an address with signed out user.
-//    @Test
-//    public void shouldNotSaveAddressWithSignedOutUser() throws Exception {
-//        when(mockCustomerService.getCustomer("database_accesstoken"))
-//                .thenThrow(new AuthorizationFailedException("ATHR-002", "Customer is logged out. Log in again to access this endpoint."));
-//
-//        mockMvc
-//                .perform(post("/address?content=my_address")
-//                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-//                        .header("authorization", "Bearer database_accesstoken"))
-//                .andExpect(status().isForbidden())
-//                .andExpect(jsonPath("code").value("ATHR-002"));
-//        verify(mockCustomerService, times(1)).getCustomer("database_accesstoken");
-//        verify(mockAddressService, times(0)).getStateByUUID(anyString());
-//        verify(mockAddressService, times(0)).saveAddress(any(), any());
-//    }
+    @Test
+    public void shouldNotSaveAddressWithSignedOutUser() throws Exception {
+        when(mockCustomerService.getCustomer("database_accesstoken"))
+                .thenThrow(new AuthorizationFailedException("ATHR-002", "Customer is logged out. Log in again to access this endpoint."));
+
+        mockMvc
+                .perform(post("/address?content=my_address")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                        .header("authorization", "Bearer database_accesstoken"))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("code").value("ATHR-002"));
+        verify(mockCustomerService, times(1)).getCustomer("database_accesstoken");
+        verify(mockAddressService, times(0)).getStateByUUID(anyString());
+        verify(mockAddressService, times(0)).saveAddress(any(), any());
+    }
 //
 //    //This test case passes when you have handled the exception of trying to save an address with user whose session is
 //    // expired.
-//    @Test
-//    public void shouldNotSaveAddressWithExpiredSessionUser() throws Exception {
-//        when(mockCustomerService.getCustomer("database_accesstoken1"))
-//                .thenThrow(new AuthorizationFailedException("ATHR-003", "Your session is expired. Log in again to access this endpoint."));
-//
-//        mockMvc
-//                .perform(post("/address?content=my_address")
-//                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-//                        .header("authorization", "Bearer database_accesstoken1"))
-//                .andExpect(status().isForbidden())
-//                .andExpect(jsonPath("code").value("ATHR-003"));
-//        verify(mockCustomerService, times(1)).getCustomer("database_accesstoken1");
-//        verify(mockAddressService, times(0)).getStateByUUID(anyString());
-//        verify(mockAddressService, times(0)).saveAddress(any(), any());
-//    }
+    @Test
+    public void shouldNotSaveAddressWithExpiredSessionUser() throws Exception {
+        when(mockCustomerService.getCustomer("database_accesstoken1"))
+                .thenThrow(new AuthorizationFailedException("ATHR-003", "Your session is expired. Log in again to access this endpoint."));
+
+        mockMvc
+                .perform(post("/address?content=my_address")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                        .header("authorization", "Bearer database_accesstoken1"))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("code").value("ATHR-003"));
+        verify(mockCustomerService, times(1)).getCustomer("database_accesstoken1");
+        verify(mockAddressService, times(0)).getStateByUUID(anyString());
+        verify(mockAddressService, times(0)).saveAddress(any(), any());
+    }
 //
 //    //This test case passes when you have handled the exception of trying to save an address with incorrect state uuid.
-//    @Test
-//    public void shouldNotSaveAddressWithIncorrectStateId() throws Exception {
-//        when(mockCustomerService.getCustomer("database_accesstoken2")).thenReturn(new CustomerEntity());
-//        when(mockAddressService.getStateByUUID("testUUID")).thenThrow(new AddressNotFoundException("ANF-002", "No state by this state id"));
-//
-//        mockMvc
-//                .perform(post("/address?content=my_address")
-//                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-//                        .header("authorization", "Bearer database_accesstoken2")
-//                        .content("{\"flat_building_name\":\"xyz\", \"locality\":\"abc\", \"city\":\"pqr\", \"pincode\":\"100000\", \"state_uuid\":\"testUUID\"}"))
-//                .andExpect(status().isNotFound())
-//                .andExpect(jsonPath("code").value("ANF-002"));
-//        verify(mockCustomerService, times(1)).getCustomer("database_accesstoken2");
-//        verify(mockAddressService, times(1)).getStateByUUID("testUUID");
-//        verify(mockAddressService, times(0)).saveAddress(any(), any());
-//    }
+    @Test
+    public void shouldNotSaveAddressWithIncorrectStateId() throws Exception {
+        when(mockCustomerService.getCustomer("database_accesstoken2")).thenReturn(new CustomerEntity());
+        when(mockAddressService.getStateByUUID("testUUID")).thenThrow(new AddressNotFoundException("ANF-002", "No state by this state id"));
+
+        mockMvc
+                .perform(post("/address?content=my_address")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                        .header("authorization", "Bearer database_accesstoken2")
+                        .content("{\"flat_building_name\":\"xyz\", \"locality\":\"abc\", \"city\":\"pqr\", \"pincode\":\"100000\", \"state_uuid\":\"testUUID\"}"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("code").value("ANF-002"));
+        verify(mockCustomerService, times(1)).getCustomer("database_accesstoken2");
+        verify(mockAddressService, times(1)).getStateByUUID("testUUID");
+        verify(mockAddressService, times(0)).saveAddress(any(), any());
+    }
 //
 //    //This test case passes when you have handled the exception of trying to save an address with empty address field.
-//    @Test
-//    public void shouldNotSaveAddressWithEmptyAddressField() throws Exception {
-//        when(mockCustomerService.getCustomer("database_accesstoken2")).thenReturn(new CustomerEntity());
-//        when(mockAddressService.getStateByUUID("testUUID")).thenReturn(new StateEntity());
-//        when(mockAddressService.saveAddress(any(), any())).thenThrow(new SaveAddressException("SAR-001", "No field can be empty"));
-//
-//        mockMvc
-//                .perform(post("/address?content=my_address")
-//                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-//                        .header("authorization", "Bearer database_accesstoken2")
-//                        .content("{\"flat_building_name\":\"xyz\", \"locality\":\"abc\", \"city\":\"\", \"pincode\":\"123456\", \"state_uuid\":\"testUUID\"}"))
-//                .andExpect(status().isBadRequest())
-//                .andExpect(jsonPath("code").value("SAR-001"));
-//        verify(mockCustomerService, times(1)).getCustomer("database_accesstoken2");
-//        verify(mockAddressService, times(1)).getStateByUUID("testUUID");
-//        verify(mockAddressService, times(1)).saveAddress(any(), any());
-//    }
+    @Test
+    public void shouldNotSaveAddressWithEmptyAddressField() throws Exception {
+        when(mockCustomerService.getCustomer("database_accesstoken2")).thenReturn(new CustomerEntity());
+        when(mockAddressService.getStateByUUID("testUUID")).thenReturn(new StateEntity());
+        when(mockAddressService.saveAddress(any(), any())).thenThrow(new SaveAddressException("SAR-001", "No field can be empty"));
+
+        mockMvc
+                .perform(post("/address?content=my_address")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                        .header("authorization", "Bearer database_accesstoken2")
+                        .content("{\"flat_building_name\":\"xyz\", \"locality\":\"abc\", \"city\":\"\", \"pincode\":\"123456\", \"state_uuid\":\"testUUID\"}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("code").value("SAR-001"));
+        verify(mockCustomerService, times(1)).getCustomer("database_accesstoken2");
+        verify(mockAddressService, times(1)).getStateByUUID("testUUID");
+        verify(mockAddressService, times(1)).saveAddress(any(), any());
+    }
 //
 //    //This test case passes when you have handled the exception of trying to save an address with incorrect pincode.
-//    @Test
-//    public void shouldNotSaveAddressWithEmptyWrongPinCode() throws Exception {
-//        when(mockCustomerService.getCustomer("database_accesstoken2")).thenReturn(new CustomerEntity());
-//        when(mockAddressService.getStateByUUID("testUUID")).thenReturn(new StateEntity());
-//        when(mockAddressService.saveAddress(any(), any())).thenThrow(new SaveAddressException("SAR-002", "Invalid pincode"));
-//
-//        mockMvc
-//                .perform(post("/address?content=my_address")
-//                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-//                        .header("authorization", "Bearer database_accesstoken2")
-//                        .content("{\"flat_building_name\":\"xyz\", \"locality\":\"abc\", \"city\":\"pqr\", \"pincode\":\"\", \"state_uuid\":\"testUUID\"}"))
-//                .andExpect(status().isBadRequest())
-//                .andExpect(jsonPath("code").value("SAR-002"));
-//        verify(mockCustomerService, times(1)).getCustomer("database_accesstoken2");
-//        verify(mockAddressService, times(1)).getStateByUUID("testUUID");
-//        verify(mockAddressService, times(1)).saveAddress(any(), any());
-//    }
+    @Test
+    public void shouldNotSaveAddressWithEmptyWrongPinCode() throws Exception {
+        when(mockCustomerService.getCustomer("database_accesstoken2")).thenReturn(new CustomerEntity());
+        when(mockAddressService.getStateByUUID("testUUID")).thenReturn(new StateEntity());
+        when(mockAddressService.saveAddress(any(), any())).thenThrow(new SaveAddressException("SAR-002", "Invalid pincode"));
+
+        mockMvc
+                .perform(post("/address?content=my_address")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                        .header("authorization", "Bearer database_accesstoken2")
+                        .content("{\"flat_building_name\":\"xyz\", \"locality\":\"abc\", \"city\":\"pqr\", \"pincode\":\"\", \"state_uuid\":\"testUUID\"}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("code").value("SAR-002"));
+        verify(mockCustomerService, times(1)).getCustomer("database_accesstoken2");
+        verify(mockAddressService, times(1)).getStateByUUID("testUUID");
+        verify(mockAddressService, times(1)).saveAddress(any(), any());
+    }
 //
 
     // ------------------------------------------ DELETE /address/{address_id} ------------------------------------------
