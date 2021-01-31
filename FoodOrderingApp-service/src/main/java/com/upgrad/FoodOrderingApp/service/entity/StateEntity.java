@@ -6,6 +6,9 @@ import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "state")
+@NamedQueries({
+        @NamedQuery( name = "stateByUUID", query = "select s from StateEntity s where s.uuid = :uuid" ),
+})
 public class StateEntity {
 
     @Id

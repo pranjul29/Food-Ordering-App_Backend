@@ -36,10 +36,10 @@ public class AddressEntity {
 
     @ManyToOne
     @JoinColumn(name = "STATE_ID")
-    private AddressEntity state_id;
+    private StateEntity stateEntity;
 
     @Column(name = "ACTIVE")
-    private String active;
+    private int active;
 
     public Integer getId() {
         return id;
@@ -89,19 +89,19 @@ public class AddressEntity {
         this.pincode = pincode;
     }
 
-    public AddressEntity getState_id() {
-        return state_id;
-    }
-
-    public void setState_id(AddressEntity state_id) {
-        this.state_id = state_id;
-    }
-
-    public String getActive() {
+    public int getActive() {
         return active;
     }
 
-    public void setActive(String active) {
+    public void setActive(int active) {
         this.active = active;
+    }
+
+    public StateEntity getStateEntity() {
+        return stateEntity;
+    }
+
+    public void setStateEntity(StateEntity stateEntity) {
+        this.stateEntity = stateEntity;
     }
 }
