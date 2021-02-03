@@ -2,7 +2,6 @@ package com.upgrad.FoodOrderingApp.service.dao;
 
 import com.upgrad.FoodOrderingApp.service.entity.AddressEntity;
 import com.upgrad.FoodOrderingApp.service.entity.CustomerAddressEntity;
-import com.upgrad.FoodOrderingApp.service.entity.StateEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -33,6 +32,20 @@ public class AddressDao {
 
     public AddressEntity saveAddress(AddressEntity addressEntity){
         entityManager.persist(addressEntity);
+        return addressEntity;
+    }
+
+    public AddressEntity getAddressByUUID(String addressUuid) {
+        try{
+            AddressEntity addressEntity = entityManager.createNamedQuery("getAddressByUuid",AddressEntity.class).setParameter("uuid",addressUuid).getSingleResult();
+            return addressEntity;
+        }catch (NoResultException nre){
+            return null;
+        }
+    }
+
+    public AddressEntity deleteAddress(AddressEntity addressEntity) {
+        entityManager.remove(addressEntity);
         return addressEntity;
     }
 }

@@ -8,6 +8,7 @@ import com.upgrad.FoodOrderingApp.service.entity.CustomerAddressEntity;
 import com.upgrad.FoodOrderingApp.service.entity.CustomerEntity;
 import com.upgrad.FoodOrderingApp.service.entity.StateEntity;
 import com.upgrad.FoodOrderingApp.service.exception.AddressNotFoundException;
+import com.upgrad.FoodOrderingApp.service.exception.AuthorizationFailedException;
 import com.upgrad.FoodOrderingApp.service.exception.SaveAddressException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -73,6 +74,7 @@ public class AddressService {
         return newAddressEntity;
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public List<AddressEntity> getAllAddress(CustomerEntity customerEntity){
 
         List<AddressEntity> addressEntities = new ArrayList<>();
@@ -84,5 +86,28 @@ public class AddressService {
             });
 
         return addressEntities;
+    }
+
+    public AddressEntity getAddressByUUID(String addressUuid,CustomerEntity customerEntity) throws AddressNotFoundException, AuthorizationFailedException {
+
+        if(addressUuid == null)
+            throw new AddressNotFoundException("ANF-005","Address id can not be empty");
+
+        AddressEntity addressEntity = addressDao.getAddressByUUID(addressUuid);
+        if(addressEntity == null)
+            throw new AddressNotFoundException("ANF-003","No address by this id");
+
+        CustomerAddressEntity customerAddressEntity = customerAddressDao.getCustomerAddressByAddress(addressEntity);
+        if(customerAddressEntity.getCustomerEntity().getUuid() != customerEntity.getUuid())
+            throw new AuthorizationFailedException("ATHR-004","You are not authorized to view/update/delete any one else's address");
+
+        return addressEntity;
+
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public AddressEntity deleteAddress(AddressEntity addressEntity) {
+        AddressEntity deletedAddressEntity = addressDao.deleteAddress(addressEntity);
+        return deletedAddressEntity;
     }
 }
