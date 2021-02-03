@@ -110,4 +110,9 @@ public class AddressService {
         AddressEntity deletedAddressEntity = addressDao.deleteAddress(addressEntity);
         return deletedAddressEntity;
     }
+
+    public List<StateEntity> getAllStates() {
+        List<StateEntity> stateEntities = stateDao.getAllStates();
+        return stateEntities;
+    }
 }

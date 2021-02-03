@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import java.util.List;
 
 @Repository
 public class StateDao {
@@ -20,6 +21,15 @@ public class StateDao {
                     .setParameter("uuid", stateUUID)
                     .getSingleResult();
         } catch (NoResultException ex) {
+            return null;
+        }
+    }
+
+    public List<StateEntity> getAllStates() {
+        try {
+            List<StateEntity> stateEntities = entityManager.createNamedQuery("getAllStates",StateEntity.class).getResultList();
+            return stateEntities;
+        }catch (NoResultException nre){
             return null;
         }
     }

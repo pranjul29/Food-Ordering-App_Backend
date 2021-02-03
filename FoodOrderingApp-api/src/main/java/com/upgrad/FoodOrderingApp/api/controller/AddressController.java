@@ -16,10 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @CrossOrigin
 @RestController
@@ -97,6 +94,24 @@ public class AddressController {
 
         DeleteAddressResponse deleteAddressResponse = new DeleteAddressResponse().id(UUID.fromString(deleteAddressEntity.getUuid())).status("ADDRESS DELETED SUCCESSFULLY");
         return new ResponseEntity<DeleteAddressResponse>(deleteAddressResponse,HttpStatus.OK);
+    }
+
+    @RequestMapping(method = RequestMethod.GET,path = "/states",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<StatesListResponse> getAllStates(){
+        List<StateEntity> stateEntities = addressService.getAllStates();
+
+        if(!stateEntities.isEmpty()){
+            List<StatesList> statesLists = new ArrayList<>();
+            stateEntities.forEach(stateEntity -> {
+                StatesList statesList = new StatesList().id(UUID.fromString(stateEntity.getUuid())).stateName(stateEntity.getState_name());
+                statesLists.add(statesList);
+            });
+            StatesListResponse statesListResponse = new StatesListResponse().states(statesLists);
+            return new ResponseEntity<StatesListResponse>(statesListResponse,HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<StatesListResponse>(new StatesListResponse(),HttpStatus.OK);
+        }
     }
 
 }
