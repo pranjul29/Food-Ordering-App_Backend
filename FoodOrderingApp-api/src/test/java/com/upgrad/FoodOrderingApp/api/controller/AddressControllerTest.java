@@ -187,124 +187,124 @@ public class AddressControllerTest {
     // ------------------------------------------ DELETE /address/{address_id} ------------------------------------------
 
     //This test case passes when you can successfully delete an address.
-//    @Test
-//    public void shouldDeleteAddress() throws Exception {
-//        final CustomerEntity customerEntity = new CustomerEntity();
-//        when(mockCustomerService.getCustomer("database_accesstoken2")).thenReturn(customerEntity);
-//
-//        final AddressEntity addressEntity = new AddressEntity();
-//        when(mockAddressService.getAddressByUUID("82849cd5-106e-4b34-b9bf-94954c6ff527", customerEntity)).thenReturn(addressEntity);
-//
-//        final AddressEntity deletedAddressEntity = new AddressEntity();
-//        final String uuid = UUID.randomUUID().toString();
-//        deletedAddressEntity.setUuid(uuid);
-//        when(mockAddressService.deleteAddress(addressEntity)).thenReturn(deletedAddressEntity);
-//
-//        mockMvc
-//                .perform(delete("/address/82849cd5-106e-4b34-b9bf-94954c6ff527")
-//                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-//                        .header("authorization", "Bearer database_accesstoken2")
-//                        .content("{\"flat_building_name\":\"xyz\", \"locality\":\"abc\", \"city\":\"pqr\", \"pincode\":\"100000\", \"state_uuid\":\"c860e78a-a29b-11e8-9a3a-720006ceb890\"}"))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("id").value(uuid))
-//                .andExpect(jsonPath("status").value("ADDRESS DELETED SUCCESSFULLY"));
-//        verify(mockCustomerService, times(1)).getCustomer("database_accesstoken2");
-//        verify(mockAddressService, times(1)).getAddressByUUID("82849cd5-106e-4b34-b9bf-94954c6ff527", customerEntity);
-//        verify(mockAddressService, times(1)).deleteAddress(addressEntity);
-//    }
-//
-//    //This test case passes when you have handled the exception of trying to delete an address with non existing access-token.
-//    @Test
-//    public void shouldNotDeleteAddressWithNonExistingAccessToken() throws Exception {
-//        when(mockCustomerService.getCustomer("non_existing_access_token"))
-//                .thenThrow(new AuthorizationFailedException("ATHR-001", "Customer is not Logged in."));
-//
-//        mockMvc
-//                .perform(delete("/address/address_id")
-//                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-//                        .header("authorization", "Bearer non_existing_access_token"))
-//                .andExpect(status().isForbidden())
-//                .andExpect(jsonPath("code").value("ATHR-001"));
-//        verify(mockCustomerService, times(1)).getCustomer("non_existing_access_token");
-//        verify(mockAddressService, times(0)).getAddressByUUID(anyString(), any());
-//        verify(mockAddressService, times(0)).deleteAddress(any());
-//    }
-//
-//    //This test case passes when you have handled the exception of trying to delete an address with a signed out user.
-//    @Test
-//    public void shouldNotDeleteAddressWithSignedOutUser() throws Exception {
-//        when(mockCustomerService.getCustomer("database_accesstoken"))
-//                .thenThrow(new AuthorizationFailedException("ATHR-002", "Customer is logged out. Log in again to access this endpoint."));
-//
-//        mockMvc
-//                .perform(delete("/address/address_id")
-//                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-//                        .header("authorization", "Bearer database_accesstoken"))
-//                .andExpect(status().isForbidden())
-//                .andExpect(jsonPath("code").value("ATHR-002"));
-//        verify(mockCustomerService, times(1)).getCustomer("database_accesstoken");
-//        verify(mockAddressService, times(0)).getAddressByUUID(anyString(), any());
-//        verify(mockAddressService, times(0)).deleteAddress(any());
-//    }
-//
-//    //This test case passes when you have handled the exception of trying to delete an address with expired session user.
-//    @Test
-//    public void shouldNotDeleteAddressWithExpiredSessionUser() throws Exception {
-//        when(mockCustomerService.getCustomer("database_accesstoken1"))
-//                .thenThrow(new AuthorizationFailedException("ATHR-003", "Your session is expired. Log in again to access this endpoint."));
-//
-//        mockMvc
-//                .perform(delete("/address/address_id")
-//                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-//                        .header("authorization", "Bearer database_accesstoken1"))
-//                .andExpect(status().isForbidden())
-//                .andExpect(jsonPath("code").value("ATHR-003"));
-//        verify(mockCustomerService, times(1)).getCustomer("database_accesstoken1");
-//        verify(mockAddressService, times(0)).getAddressByUUID(anyString(), any());
-//        verify(mockAddressService, times(0)).deleteAddress(any());
-//    }
-//
-//    //This test case passes when you have handled the exception of trying to delete an address with by providing an
-//    // address id that does not exist in the database.
-//    @Test
-//    public void shouldNotDeleteAddressIfNoAddressPresentAgainstGivenAddressId() throws Exception {
-//        final CustomerEntity customerEntity = new CustomerEntity();
-//        when(mockCustomerService.getCustomer("database_accesstoken2")).thenReturn(customerEntity);
-//        when(mockAddressService.getAddressByUUID("82849cd5-106e-4b34-b9bf-94954c6ff527", customerEntity))
-//                .thenThrow(new AddressNotFoundException("ANF-003", "No address by this id"));
-//
-//        mockMvc
-//                .perform(delete("/address/82849cd5-106e-4b34-b9bf-94954c6ff527")
-//                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-//                        .header("authorization", "Bearer database_accesstoken2")
-//                        .content("{\"flat_building_name\":\"xyz\", \"locality\":\"abc\", \"city\":\"pqr\", \"pincode\":\"100000\", \"state_uuid\":\"c860e78a-a29b-11e8-9a3a-720006ceb890\"}"))
-//                .andExpect(status().isNotFound())
-//                .andExpect(jsonPath("code").value("ANF-003"));
-//        verify(mockCustomerService, times(1)).getCustomer("database_accesstoken2");
-//        verify(mockAddressService, times(1)).getAddressByUUID("82849cd5-106e-4b34-b9bf-94954c6ff527", customerEntity);
-//        verify(mockAddressService, times(0)).deleteAddress(any());
-//    }
-//
-//    //This test case passes when you have handled the exception of trying to delete an address of a different customer
-//    // other than the customer who is currently logged in.
-//    @Test
-//    public void shouldNotDeleteAddressForWrongCustomer() throws Exception {
-//        final CustomerEntity customerEntity = new CustomerEntity();
-//        when(mockCustomerService.getCustomer("database_accesstoken2")).thenReturn(customerEntity);
-//        when(mockAddressService.getAddressByUUID("82849cd5-106e-4b34-b9bf-94954c6ff527", customerEntity))
-//                .thenThrow(new AuthorizationFailedException("ATHR-004", "You are not authorized to view/update/delete any one else's address"));
-//
-//        mockMvc
-//                .perform(delete("/address/82849cd5-106e-4b34-b9bf-94954c6ff527")
-//                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-//                        .header("authorization", "Bearer database_accesstoken2")
-//                        .content("{\"flat_building_name\":\"xyz\", \"locality\":\"abc\", \"city\":\"pqr\", \"pincode\":\"100000\", \"state_uuid\":\"c860e78a-a29b-11e8-9a3a-720006ceb890\"}"))
-//                .andExpect(status().isForbidden())
-//                .andExpect(jsonPath("code").value("ATHR-004"));
-//        verify(mockCustomerService, times(1)).getCustomer("database_accesstoken2");
-//        verify(mockAddressService, times(1)).getAddressByUUID("82849cd5-106e-4b34-b9bf-94954c6ff527", customerEntity);
-//        verify(mockAddressService, times(0)).deleteAddress(any());
-//    }
+    @Test
+    public void shouldDeleteAddress() throws Exception {
+        final CustomerEntity customerEntity = new CustomerEntity();
+        when(mockCustomerService.getCustomer("database_accesstoken2")).thenReturn(customerEntity);
+
+        final AddressEntity addressEntity = new AddressEntity();
+        when(mockAddressService.getAddressByUUID("82849cd5-106e-4b34-b9bf-94954c6ff527", customerEntity)).thenReturn(addressEntity);
+
+        final AddressEntity deletedAddressEntity = new AddressEntity();
+        final String uuid = UUID.randomUUID().toString();
+        deletedAddressEntity.setUuid(uuid);
+        when(mockAddressService.deleteAddress(addressEntity)).thenReturn(deletedAddressEntity);
+
+        mockMvc
+                .perform(delete("/address/82849cd5-106e-4b34-b9bf-94954c6ff527")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                        .header("authorization", "Bearer database_accesstoken2")
+                        .content("{\"flat_building_name\":\"xyz\", \"locality\":\"abc\", \"city\":\"pqr\", \"pincode\":\"100000\", \"state_uuid\":\"c860e78a-a29b-11e8-9a3a-720006ceb890\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("id").value(uuid))
+                .andExpect(jsonPath("status").value("ADDRESS DELETED SUCCESSFULLY"));
+        verify(mockCustomerService, times(1)).getCustomer("database_accesstoken2");
+        verify(mockAddressService, times(1)).getAddressByUUID("82849cd5-106e-4b34-b9bf-94954c6ff527", customerEntity);
+        verify(mockAddressService, times(1)).deleteAddress(addressEntity);
+    }
+
+    //This test case passes when you have handled the exception of trying to delete an address with non existing access-token.
+    @Test
+    public void shouldNotDeleteAddressWithNonExistingAccessToken() throws Exception {
+        when(mockCustomerService.getCustomer("non_existing_access_token"))
+                .thenThrow(new AuthorizationFailedException("ATHR-001", "Customer is not Logged in."));
+
+        mockMvc
+                .perform(delete("/address/address_id")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                        .header("authorization", "Bearer non_existing_access_token"))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("code").value("ATHR-001"));
+        verify(mockCustomerService, times(1)).getCustomer("non_existing_access_token");
+        verify(mockAddressService, times(0)).getAddressByUUID(anyString(), any());
+        verify(mockAddressService, times(0)).deleteAddress(any());
+    }
+
+    //This test case passes when you have handled the exception of trying to delete an address with a signed out user.
+    @Test
+    public void shouldNotDeleteAddressWithSignedOutUser() throws Exception {
+        when(mockCustomerService.getCustomer("database_accesstoken"))
+                .thenThrow(new AuthorizationFailedException("ATHR-002", "Customer is logged out. Log in again to access this endpoint."));
+
+        mockMvc
+                .perform(delete("/address/address_id")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                        .header("authorization", "Bearer database_accesstoken"))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("code").value("ATHR-002"));
+        verify(mockCustomerService, times(1)).getCustomer("database_accesstoken");
+        verify(mockAddressService, times(0)).getAddressByUUID(anyString(), any());
+        verify(mockAddressService, times(0)).deleteAddress(any());
+    }
+
+    //This test case passes when you have handled the exception of trying to delete an address with expired session user.
+    @Test
+    public void shouldNotDeleteAddressWithExpiredSessionUser() throws Exception {
+        when(mockCustomerService.getCustomer("database_accesstoken1"))
+                .thenThrow(new AuthorizationFailedException("ATHR-003", "Your session is expired. Log in again to access this endpoint."));
+
+        mockMvc
+                .perform(delete("/address/address_id")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                        .header("authorization", "Bearer database_accesstoken1"))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("code").value("ATHR-003"));
+        verify(mockCustomerService, times(1)).getCustomer("database_accesstoken1");
+        verify(mockAddressService, times(0)).getAddressByUUID(anyString(), any());
+        verify(mockAddressService, times(0)).deleteAddress(any());
+    }
+
+    //This test case passes when you have handled the exception of trying to delete an address with by providing an
+    // address id that does not exist in the database.
+    @Test
+    public void shouldNotDeleteAddressIfNoAddressPresentAgainstGivenAddressId() throws Exception {
+        final CustomerEntity customerEntity = new CustomerEntity();
+        when(mockCustomerService.getCustomer("database_accesstoken2")).thenReturn(customerEntity);
+        when(mockAddressService.getAddressByUUID("82849cd5-106e-4b34-b9bf-94954c6ff527", customerEntity))
+                .thenThrow(new AddressNotFoundException("ANF-003", "No address by this id"));
+
+        mockMvc
+                .perform(delete("/address/82849cd5-106e-4b34-b9bf-94954c6ff527")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                        .header("authorization", "Bearer database_accesstoken2")
+                        .content("{\"flat_building_name\":\"xyz\", \"locality\":\"abc\", \"city\":\"pqr\", \"pincode\":\"100000\", \"state_uuid\":\"c860e78a-a29b-11e8-9a3a-720006ceb890\"}"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("code").value("ANF-003"));
+        verify(mockCustomerService, times(1)).getCustomer("database_accesstoken2");
+        verify(mockAddressService, times(1)).getAddressByUUID("82849cd5-106e-4b34-b9bf-94954c6ff527", customerEntity);
+        verify(mockAddressService, times(0)).deleteAddress(any());
+    }
+
+    //This test case passes when you have handled the exception of trying to delete an address of a different customer
+    // other than the customer who is currently logged in.
+    @Test
+    public void shouldNotDeleteAddressForWrongCustomer() throws Exception {
+        final CustomerEntity customerEntity = new CustomerEntity();
+        when(mockCustomerService.getCustomer("database_accesstoken2")).thenReturn(customerEntity);
+        when(mockAddressService.getAddressByUUID("82849cd5-106e-4b34-b9bf-94954c6ff527", customerEntity))
+                .thenThrow(new AuthorizationFailedException("ATHR-004", "You are not authorized to view/update/delete any one else's address"));
+
+        mockMvc
+                .perform(delete("/address/82849cd5-106e-4b34-b9bf-94954c6ff527")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                        .header("authorization", "Bearer database_accesstoken2")
+                        .content("{\"flat_building_name\":\"xyz\", \"locality\":\"abc\", \"city\":\"pqr\", \"pincode\":\"100000\", \"state_uuid\":\"c860e78a-a29b-11e8-9a3a-720006ceb890\"}"))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("code").value("ATHR-004"));
+        verify(mockCustomerService, times(1)).getCustomer("database_accesstoken2");
+        verify(mockAddressService, times(1)).getAddressByUUID("82849cd5-106e-4b34-b9bf-94954c6ff527", customerEntity);
+        verify(mockAddressService, times(0)).deleteAddress(any());
+    }
 
     // ------------------------------------------ GET /address/customer ------------------------------------------
 
