@@ -1,4 +1,4 @@
-/* package com.upgrad.FoodOrderingApp.api.controller;
+ package com.upgrad.FoodOrderingApp.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.upgrad.FoodOrderingApp.api.model.AddressList;
@@ -26,6 +26,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Collections;
 import java.util.UUID;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -73,8 +74,8 @@ public class AddressControllerTest {
         verify(mockAddressService, times(1)).getStateByUUID("testUUID");
         verify(mockAddressService, times(1)).saveAddress(any(), any());
     }
-
-    //This test case passes when you have handled the exception of trying to save an address with non existing access-token.
+//
+//    //This test case passes when you have handled the exception of trying to save an address with non existing access-token.
     @Test
     public void shouldNotSaveAddressWithNonExistingAccessToken() throws Exception {
         when(mockCustomerService.getCustomer("non_existing_access_token"))
@@ -90,8 +91,8 @@ public class AddressControllerTest {
         verify(mockAddressService, times(0)).getStateByUUID(anyString());
         verify(mockAddressService, times(0)).saveAddress(any(), any());
     }
-
-    //This test case passes when you have handled the exception of trying to save an address with signed out user.
+//
+//    //This test case passes when you have handled the exception of trying to save an address with signed out user.
     @Test
     public void shouldNotSaveAddressWithSignedOutUser() throws Exception {
         when(mockCustomerService.getCustomer("database_accesstoken"))
@@ -107,9 +108,9 @@ public class AddressControllerTest {
         verify(mockAddressService, times(0)).getStateByUUID(anyString());
         verify(mockAddressService, times(0)).saveAddress(any(), any());
     }
-
-    //This test case passes when you have handled the exception of trying to save an address with user whose session is
-    // expired.
+//
+//    //This test case passes when you have handled the exception of trying to save an address with user whose session is
+//    // expired.
     @Test
     public void shouldNotSaveAddressWithExpiredSessionUser() throws Exception {
         when(mockCustomerService.getCustomer("database_accesstoken1"))
@@ -125,8 +126,8 @@ public class AddressControllerTest {
         verify(mockAddressService, times(0)).getStateByUUID(anyString());
         verify(mockAddressService, times(0)).saveAddress(any(), any());
     }
-
-    //This test case passes when you have handled the exception of trying to save an address with incorrect state uuid.
+//
+//    //This test case passes when you have handled the exception of trying to save an address with incorrect state uuid.
     @Test
     public void shouldNotSaveAddressWithIncorrectStateId() throws Exception {
         when(mockCustomerService.getCustomer("database_accesstoken2")).thenReturn(new CustomerEntity());
@@ -143,8 +144,8 @@ public class AddressControllerTest {
         verify(mockAddressService, times(1)).getStateByUUID("testUUID");
         verify(mockAddressService, times(0)).saveAddress(any(), any());
     }
-
-    //This test case passes when you have handled the exception of trying to save an address with empty address field.
+//
+//    //This test case passes when you have handled the exception of trying to save an address with empty address field.
     @Test
     public void shouldNotSaveAddressWithEmptyAddressField() throws Exception {
         when(mockCustomerService.getCustomer("database_accesstoken2")).thenReturn(new CustomerEntity());
@@ -162,8 +163,8 @@ public class AddressControllerTest {
         verify(mockAddressService, times(1)).getStateByUUID("testUUID");
         verify(mockAddressService, times(1)).saveAddress(any(), any());
     }
-
-    //This test case passes when you have handled the exception of trying to save an address with incorrect pincode.
+//
+//    //This test case passes when you have handled the exception of trying to save an address with incorrect pincode.
     @Test
     public void shouldNotSaveAddressWithEmptyWrongPinCode() throws Exception {
         when(mockCustomerService.getCustomer("database_accesstoken2")).thenReturn(new CustomerEntity());
@@ -181,7 +182,7 @@ public class AddressControllerTest {
         verify(mockAddressService, times(1)).getStateByUUID("testUUID");
         verify(mockAddressService, times(1)).saveAddress(any(), any());
     }
-
+//
 
     // ------------------------------------------ DELETE /address/{address_id} ------------------------------------------
 
@@ -346,8 +347,8 @@ public class AddressControllerTest {
         verify(mockCustomerService, times(1)).getCustomer("database_accesstoken2");
         verify(mockAddressService, times(1)).getAllAddress(customerEntity);
     }
-
-    //This test case passes when you have handled the exception of trying to fetch addresses for any customer with non existing access-token.
+//
+//    //This test case passes when you have handled the exception of trying to fetch addresses for any customer with non existing access-token.
     @Test
     public void shouldNotGetAllAddressesWithNonExistingAccessToken() throws Exception {
         when(mockCustomerService.getCustomer("non_existing_access_token"))
@@ -362,9 +363,9 @@ public class AddressControllerTest {
         verify(mockCustomerService, times(1)).getCustomer("non_existing_access_token");
         verify(mockAddressService, times(0)).getAllAddress(any());
     }
-
-    //This test case passes when you have handled the exception of trying to fetch addresses for any customer with while
-    // the customer is currently signed out.
+//
+//    //This test case passes when you have handled the exception of trying to fetch addresses for any customer with while
+//    // the customer is currently signed out.
     @Test
     public void shouldNotGetAllAddressesWithSignedOutUser() throws Exception {
         when(mockCustomerService.getCustomer("database_accesstoken"))
@@ -379,9 +380,9 @@ public class AddressControllerTest {
         verify(mockCustomerService, times(1)).getCustomer("database_accesstoken");
         verify(mockAddressService, times(0)).getAllAddress(any());
     }
-
-    //This test case passes when you have handled the exception of trying to fetch addresses for any customer while
-    // the session of that customer is already expired.
+//
+//    //This test case passes when you have handled the exception of trying to fetch addresses for any customer while
+//    // the session of that customer is already expired.
     @Test
     public void shouldNotGetAllAddressesWithExpiredSessionUser() throws Exception {
         when(mockCustomerService.getCustomer("database_accesstoken1"))
@@ -432,4 +433,4 @@ public class AddressControllerTest {
         final StatesListResponse statesLists = new ObjectMapper().readValue(response, StatesListResponse.class);
         assertNull(statesLists.getStates());
     }
-}*/
+}
