@@ -20,7 +20,7 @@
         <setting name="provider-name" value="Hibernate" />
         <datasource-mapping>
           <factory-entry name="Entities" />
-          <factory-entry name="FoodOrderingApp-api" />
+          <factory-entry name="FoodOrderingApp-api" value="6b189ddd-eb57-4a03-a0ea-ab9ba44a16f4" />
         </datasource-mapping>
         <naming-strategy-map />
       </configuration>

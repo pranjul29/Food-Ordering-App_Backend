@@ -58,20 +58,30 @@ public class AddressService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public AddressEntity saveAddress(AddressEntity addressEntity, CustomerEntity customerEntity) throws SaveAddressException {
-        if(addressEntity.getCity() == null || addressEntity.getFlatBuilNo() == null || addressEntity. getLocality() == null || addressEntity.getPincode() == null || addressEntity.getState() == null)
+    public AddressEntity saveAddress(AddressEntity addressEntity, StateEntity stateEntity) throws SaveAddressException {
+        if(addressEntity.getCity() == null || addressEntity.getFlatBuilNo() == null || addressEntity. getLocality() == null || addressEntity.getPincode() == null)
             throw new SaveAddressException("SAR-001","No field can be empty");
         else if(isValidPinCode(addressEntity.getPincode()) == false)
             throw new SaveAddressException("SAR-002","Invalid pincode");
 
-        CustomerAddressEntity customerAddressEntity = new CustomerAddressEntity();
-        customerAddressEntity.setCustomerEntity(customerEntity);
-
+        addressEntity.setState(stateEntity);
         //CustomerAddressEntity newCustomerAddressEntity = addressDao.saveCustomerAddress(customerAddressEntity);
         AddressEntity newAddressEntity = addressDao.saveAddress(addressEntity);
-        customerAddressEntity.setAddressEntity(newAddressEntity);
-        CustomerAddressEntity newCustomerAddressEntity = addressDao.saveCustomerAddress(customerAddressEntity);
+        //customerAddressEntity.setAddressEntity(newAddressEntity);
+        //CustomerAddressEntity newCustomerAddressEntity = addressDao.saveCustomerAddress(customerAddressEntity);
         return newAddressEntity;
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public CustomerAddressEntity saveCustomerAddressEntity(CustomerEntity customerEntity,AddressEntity addressEntity){
+
+        CustomerAddressEntity customerAddressEntity = new CustomerAddressEntity();
+        customerAddressEntity.setCustomerEntity(customerEntity);
+        customerAddressEntity.setAddressEntity(addressEntity);
+
+        CustomerAddressEntity createdCustomerAddressEntity = customerAddressDao.saveCustomerAddress(customerAddressEntity);
+        return createdCustomerAddressEntity;
+
     }
 
     @Transactional(propagation = Propagation.REQUIRED)

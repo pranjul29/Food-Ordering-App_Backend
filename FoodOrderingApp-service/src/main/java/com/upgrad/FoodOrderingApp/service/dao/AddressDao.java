@@ -25,10 +25,10 @@ public class AddressDao {
 //        }
 //    }
 
-    public CustomerAddressEntity saveCustomerAddress(CustomerAddressEntity customerAddressEntity){
-        entityManager.persist(customerAddressEntity);
-        return customerAddressEntity;
-    }
+//    public CustomerAddressEntity saveCustomerAddress(CustomerAddressEntity customerAddressEntity){
+//        entityManager.persist(customerAddressEntity);
+//        return customerAddressEntity;
+//    }
 
     public AddressEntity saveAddress(AddressEntity addressEntity){
         entityManager.persist(addressEntity);
