@@ -45,6 +45,14 @@ public class AddressEntity {
     @Column(name = "ACTIVE")
     private int active;
 
+    public AddressEntity(String addressId, String s, String someLocality, String someCity, String s1, StateEntity stateEntity) {
+
+    }
+
+    public AddressEntity() {
+
+    }
+
     public Integer getId() {
         return id;
     }

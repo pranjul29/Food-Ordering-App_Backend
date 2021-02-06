@@ -4,6 +4,8 @@ import com.upgrad.FoodOrderingApp.api.model.*;
 import com.upgrad.FoodOrderingApp.service.entity.ItemEntity;
 import com.upgrad.FoodOrderingApp.service.entity.RestaurantCategoryEntity;
 import com.upgrad.FoodOrderingApp.service.entity.RestaurantEntity;
+
+import java.math.BigDecimal;
 import java.util.*;
 
 final public class RestaurantTransformer {
@@ -33,9 +35,9 @@ final public class RestaurantTransformer {
                     .id(UUID.fromString(restaurantEntity.getUuid()))
                     .restaurantName(restaurantEntity.getRestaurantName())
                     .photoURL(restaurantEntity.getPhotoUrl())
-                    .numberCustomersRated(restaurantEntity.getNumberOfCustomersRated())
-                    .customerRating(restaurantEntity.getCustomerRating())
-                    .averagePrice(restaurantEntity.getAveragePriceForTwo())
+                    .numberCustomersRated(restaurantEntity.getNumberCustomersRated())
+                    .customerRating(BigDecimal.valueOf(restaurantEntity.getCustomerRating()))
+                    .averagePrice(restaurantEntity.getAvgPrice())
                     .address(address)
                     .categories(categoryResultDelimiter);
 
@@ -71,9 +73,9 @@ final public class RestaurantTransformer {
         restaurantDetailsResponse.setId(UUID.fromString(restaurantEntity.getUuid()));
         restaurantDetailsResponse.setRestaurantName(restaurantEntity.getRestaurantName());
         restaurantDetailsResponse.setPhotoURL(restaurantEntity.getPhotoUrl());
-        restaurantDetailsResponse.setCustomerRating(restaurantEntity.getCustomerRating());
-        restaurantDetailsResponse.setAveragePrice(restaurantEntity.getAveragePriceForTwo());
-        restaurantDetailsResponse.setNumberCustomersRated(restaurantEntity.getNumberOfCustomersRated());
+        restaurantDetailsResponse.setCustomerRating(BigDecimal.valueOf(restaurantEntity.getCustomerRating()));
+        restaurantDetailsResponse.setAveragePrice(restaurantEntity.getAvgPrice());
+        restaurantDetailsResponse.setNumberCustomersRated(restaurantEntity.getNumberCustomersRated());
         restaurantDetailsResponse.address(address);
         restaurantDetailsResponse.setCategories(categoryLists);
         return restaurantDetailsResponse;

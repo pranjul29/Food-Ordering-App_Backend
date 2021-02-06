@@ -27,7 +27,7 @@ public class OrderService {
         return orderDao.getOrderDetails(ordersid);
     }
 
-    public List<OrdersEntity> getOrdersByCustomers(String id) {
+    public List<OrderEntity> getOrdersByCustomers(String id) {
         return orderDao.getOrders(id);
     }
 
@@ -47,7 +47,7 @@ public class OrderService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public OrdersEntity saveOrder(OrdersEntity orderEntity) {
+    public OrderEntity saveOrder(OrderEntity orderEntity) {
         return orderDao.saveOrder(orderEntity);
     }
 

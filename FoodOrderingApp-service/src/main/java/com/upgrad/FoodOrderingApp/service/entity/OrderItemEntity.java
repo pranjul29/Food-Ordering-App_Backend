@@ -1,7 +1,6 @@
 package com.upgrad.FoodOrderingApp.service.entity;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "order_item")
@@ -19,7 +18,7 @@ public class OrderItemEntity {
 
     @ManyToOne
     @JoinColumn(name = "order_id")
-    private OrdersEntity orders;
+    private OrderEntity orders;
 
     @ManyToOne
     @JoinColumn(name = "item_id" , referencedColumnName = "id")
@@ -43,11 +42,11 @@ public class OrderItemEntity {
         this.id = id;
     }
 
-    public OrdersEntity getOrders() {
+    public OrderEntity getOrders() {
         return orders;
     }
 
-    public void setOrders(OrdersEntity orders) {
+    public void setOrders(OrderEntity orders) {
         this.orders = orders;
     }
 

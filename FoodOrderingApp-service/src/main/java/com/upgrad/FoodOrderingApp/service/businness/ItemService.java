@@ -4,10 +4,8 @@ import com.upgrad.FoodOrderingApp.service.dao.ItemDao;
 import com.upgrad.FoodOrderingApp.service.dao.OrdersDao;
 import com.upgrad.FoodOrderingApp.service.entity.ItemEntity;
 import com.upgrad.FoodOrderingApp.service.entity.OrderItemEntity;
-import com.upgrad.FoodOrderingApp.service.entity.OrdersEntity;
+import com.upgrad.FoodOrderingApp.service.entity.OrderEntity;
 import com.upgrad.FoodOrderingApp.service.entity.RestaurantEntity;
-import org.hibernate.MultiIdentifierLoadAccess;
-import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,11 +26,11 @@ public class ItemService {
     public  List<ItemEntity> getItemsByPopularity(RestaurantEntity restaurantEntity) {
         //itemDao.getItemsByPopularity(restaurantEntity);
         // get all the orders using UUID of restaurant
-        List<OrdersEntity> ordersEntityList = ordersDao.getAllOrders(restaurantEntity.getUuid());
+        List<OrderEntity> orderEntityList = ordersDao.getAllOrders(restaurantEntity.getUuid());
 
         List OrderIds = new ArrayList();
 
-        for(OrdersEntity oe:ordersEntityList) {
+        for(OrderEntity oe: orderEntityList) {
             OrderIds.add(oe.getId()); // add each order Id to the List
         }
         if(OrderIds.size()==0){

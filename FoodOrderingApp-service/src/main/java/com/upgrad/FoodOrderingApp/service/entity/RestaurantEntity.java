@@ -25,15 +25,15 @@ public class RestaurantEntity implements Serializable {
     private long id;
 
     @Column(name="AVERAGE_PRICE_FOR_TWO")
-    private Integer averagePriceForTwo;
+    private Integer avgPrice;
 
     @Column(name = "CUSTOMER_RATING",scale = 2)
     @NotNull
-    private BigDecimal customerRating;
+    private double customerRating;
 
     @Column(name = "NUMBER_OF_CUSTOMERS_RATED")
     @NotNull
-    private int numberOfCustomersRated;
+    private int numberCustomersRated;
 
     @Column(name = "PHOTO_URL")
     @NotNull
@@ -52,7 +52,7 @@ public class RestaurantEntity implements Serializable {
 
     //bi-directional many-to-one association to Order
     @OneToMany(mappedBy="restaurant")
-    private List<OrdersEntity> orders;
+    private List<OrderEntity> orders;
 
     //bi-directional many-to-one association to Address
     @ManyToOne(fetch = FetchType.EAGER)
@@ -80,28 +80,28 @@ public class RestaurantEntity implements Serializable {
         this.id = id;
     }
 
-    public Integer getAveragePriceForTwo() {
-        return averagePriceForTwo;
-    }
-
-    public void setAveragePriceForTwo(Integer averagePriceForTwo) {
-        this.averagePriceForTwo = averagePriceForTwo;
-    }
-
-    public BigDecimal getCustomerRating() {
+    public double getCustomerRating() {
         return customerRating;
     }
 
-    public void setCustomerRating(BigDecimal customerRating) {
+    public void setCustomerRating(double customerRating) {
         this.customerRating = customerRating;
     }
 
-    public int getNumberOfCustomersRated() {
-        return numberOfCustomersRated;
+    public Integer getAvgPrice() {
+        return avgPrice;
     }
 
-    public void setNumberOfCustomersRated(int numberOfCustomersRated) {
-        this.numberOfCustomersRated = numberOfCustomersRated;
+    public void setAvgPrice(Integer avgPrice) {
+        this.avgPrice = avgPrice;
+    }
+
+    public int getNumberCustomersRated() {
+        return numberCustomersRated;
+    }
+
+    public void setNumberCustomersRated(int numberCustomersRated) {
+        this.numberCustomersRated = numberCustomersRated;
     }
 
     public String getPhotoUrl() {
@@ -128,11 +128,11 @@ public class RestaurantEntity implements Serializable {
         this.uuid = uuid;
     }
 
-    public List<OrdersEntity> getOrders() {
+    public List<OrderEntity> getOrders() {
         return orders;
     }
 
-    public void setOrders(List<OrdersEntity> orders) {
+    public void setOrders(List<OrderEntity> orders) {
         this.orders = orders;
     }
 

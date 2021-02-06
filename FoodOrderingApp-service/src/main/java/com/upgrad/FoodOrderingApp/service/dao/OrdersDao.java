@@ -1,8 +1,7 @@
 package com.upgrad.FoodOrderingApp.service.dao;
 
-import com.upgrad.FoodOrderingApp.service.entity.ItemEntity;
 import com.upgrad.FoodOrderingApp.service.entity.OrderItemEntity;
-import com.upgrad.FoodOrderingApp.service.entity.OrdersEntity;
+import com.upgrad.FoodOrderingApp.service.entity.OrderEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -15,9 +14,9 @@ public class OrdersDao {
     @Autowired
     EntityManager entityManager;
 
-    public List<OrdersEntity> getAllOrders(String restaurantUUID){
+    public List<OrderEntity> getAllOrders(String restaurantUUID){
         try{
-            return  entityManager.createNamedQuery("OrdersEntity.getAllOrdersByRestaurantId",OrdersEntity.class).setParameter("restaurantUUID",restaurantUUID).getResultList();
+            return  entityManager.createNamedQuery("OrdersEntity.getAllOrdersByRestaurantId", OrderEntity.class).setParameter("restaurantUUID",restaurantUUID).getResultList();
         }
         catch (NoResultException nre){
             return null;
