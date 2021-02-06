@@ -1,5 +1,6 @@
 package com.upgrad.FoodOrderingApp.api.controller;
 
+import com.upgrad.FoodOrderingApp.api.model.CategoriesListResponse;
 import com.upgrad.FoodOrderingApp.api.model.CategoryDetailsResponse;
 import com.upgrad.FoodOrderingApp.api.model.CategoryListResponse ;
 import com.upgrad.FoodOrderingApp.api.model.ItemList;
@@ -25,51 +26,46 @@ public class CategoryController {
     CategoryService categoryService;
 
     @RequestMapping(method = RequestMethod.GET, path = "/category", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity getAllCategories() {
+    public ResponseEntity<CategoriesListResponse> getAllCategories() {
 
         List<CategoryEntity> allCategories = categoryService.getAllCategoriesOrderedByName();
 
-        List<CategoryListResponse> categoriesListResponse = new ArrayList<CategoryListResponse>();
+        List<CategoryListResponse> categoriesListForResponse = new ArrayList<CategoryListResponse>();
 
+        if(!allCategories.isEmpty()){
         for (CategoryEntity n: allCategories) {
             CategoryListResponse category = new CategoryListResponse();
             category.setCategoryName(n.getCategoryName());
             category.setId(UUID.fromString(n.getUuid()));
-            categoriesListResponse.add(category); // add each category to the List
+            categoriesListForResponse.add(category); // add each category to the List
         }
 
+        CategoriesListResponse categoriesListResponse = new CategoriesListResponse().categories(categoriesListForResponse);
         // return response entity with categoriesListResponse
-        return new ResponseEntity<>(categoriesListResponse, HttpStatus.OK);
+        return new ResponseEntity<CategoriesListResponse>(categoriesListResponse, HttpStatus.OK);}
+        else
+            return new ResponseEntity<CategoriesListResponse>(new CategoriesListResponse(),HttpStatus.OK);
     }
 
 
     @RequestMapping(method = RequestMethod.GET, path = "/category/{category_id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 
-    public ResponseEntity getCategoryById(@PathVariable String category_id) throws CategoryNotFoundException{
-        if(category_id == null || category_id.isEmpty()){ //Checking for categoryUuid to be null or empty to throw exception.
-            throw new CategoryNotFoundException("CNF-001","Category id field should not be empty");
+    public ResponseEntity<CategoryDetailsResponse> getCategoryById(@PathVariable(value = "category_id") String category_id) throws CategoryNotFoundException{
+        CategoryEntity category = categoryService.getCategoryById(category_id);
+
+        //List<ItemEntity> itemEntities = category.getItems();
+        List<ItemList> itemLists =  new ArrayList<>();
+
+        List<ItemEntity> itemEntities = category.getItems();
+        for(ItemEntity item :itemEntities){
+            ItemList itemList = new ItemList().id(UUID.fromString(item.getUuid())).price(item.getPrice()).itemName(item.getItemName())
+                    .itemType(ItemList.ItemTypeEnum.fromValue(item.getType().getValue()));
+            itemLists.add(itemList);
         }
-
-        CategoryEntity category = categoryService.getCategoryByUuid(category_id);
-
-        if(category == null){
-            throw new CategoryNotFoundException("CNF-002", "No category by this id");
-        }
-
         CategoryDetailsResponse categoryDetailsResponse = new CategoryDetailsResponse();
         categoryDetailsResponse.setCategoryName(category.getCategoryName());
         categoryDetailsResponse.setId(UUID.fromString(category.getUuid()));
-        List<ItemList> itemLists =  new ArrayList<>();
-
-        for(ItemEntity item :category.getItems()){
-            ItemList itemList = new ItemList();
-            itemList.setId(UUID.fromString(item.getUuid()));
-            itemList.setItemName(item.getItemName());
-            itemList.setPrice(item.getPrice());
-            itemLists.add(itemList);
-        }
         categoryDetailsResponse.setItemList(itemLists);
-        // return response entity with categoryDetailsResponse
-        return new ResponseEntity<>(categoryDetailsResponse, HttpStatus.OK);
+        return new ResponseEntity<CategoryDetailsResponse>(categoryDetailsResponse, HttpStatus.OK);
     }
 }

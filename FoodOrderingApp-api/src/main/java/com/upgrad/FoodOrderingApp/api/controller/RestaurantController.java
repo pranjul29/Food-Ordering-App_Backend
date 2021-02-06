@@ -58,7 +58,7 @@ public class RestaurantController {
             throw new CategoryNotFoundException("CNF-001","Category id field should not be empty");
         }
         // get the categoryEntity by using the category_id received in the request param
-        CategoryEntity categoryEntity = categoryService.getCategoryByUuid(category_id);
+        CategoryEntity categoryEntity = categoryService.getCategoryById(category_id);
 
         if(categoryEntity == null){
             throw new CategoryNotFoundException("CNF-002", "No category by this id");
