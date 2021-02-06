@@ -3,10 +3,7 @@ package com.upgrad.FoodOrderingApp.api.controller;
 
 import com.upgrad.FoodOrderingApp.api.model.*;
 import com.upgrad.FoodOrderingApp.service.businness.*;
-import com.upgrad.FoodOrderingApp.service.entity.CategoryEntity;
-import com.upgrad.FoodOrderingApp.service.entity.CustomerEntity;
-import com.upgrad.FoodOrderingApp.service.entity.ItemEntity;
-import com.upgrad.FoodOrderingApp.service.entity.RestaurantEntity;
+import com.upgrad.FoodOrderingApp.service.entity.*;
 import com.upgrad.FoodOrderingApp.service.exception.AuthorizationFailedException;
 import com.upgrad.FoodOrderingApp.service.exception.CategoryNotFoundException;
 import com.upgrad.FoodOrderingApp.service.exception.InvalidRatingException;
@@ -42,19 +39,12 @@ public class RestaurantController {
     @Autowired
     CustomerService customerService; // Handles all the Service Related to Customer.
 
-
-
-    /* The method handles get All Restaurants request
-    & produces response in RestaurantListResponse and returns list of restaurant with details from the db. If error returns error code and error message.
-    */
     @CrossOrigin
     @RequestMapping(method = RequestMethod.GET,path = "",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<RestaurantListResponse>getAllRestaurants(){
 
-        //Calls restaurantsByRating method of restaurantService to get the list of restaurant entity.
         List<RestaurantEntity> restaurantEntities = restaurantService.restaurantsByRating();
 
-        //Creating restaurant list for the response
         List<RestaurantList> restaurantLists = new LinkedList<>();
         for (RestaurantEntity restaurantEntity : restaurantEntities) { //Looping for each restaurant entity in restaurantEntities
 
@@ -135,14 +125,31 @@ public class RestaurantController {
                     }
                 }
 
-                //Creating the RestaurantDetailsResponseAddressState for the RestaurantDetailsResponseAddress
+                AddressEntity addressEntity = restaurantEntity.getAddress();
+                StateEntity stateEntity = addressEntity.getState();
+                String stateName,uuid;
+                if (stateEntity != null) {
+                    stateName = stateEntity.getState_name();
+                    uuid = stateEntity.getUuid();
+                } else {
+                    uuid = null;
+                    stateName = null;
+                }
+                UUID id = uuid != null ? UUID.fromString(uuid) : null;
                 RestaurantDetailsResponseAddressState restaurantDetailsResponseAddressState = new RestaurantDetailsResponseAddressState()
-                        .id(UUID.fromString(restaurantEntity.getAddress().getState().getUuid()))
-                        .stateName(restaurantEntity.getAddress().getState().getState_name());
+                        .id(id)
+                        .stateName(stateName);
+//                        .id(UUID.fromString(stateEntity.getUuid())).stateName(stateEntity.getState_name());
 
+                String addressUUID = addressEntity.getUuid();
+                UUID addressID;
+                if(addressUUID==null)
+                    addressID = null;
+                else
+                    addressID = UUID.fromString(addressUUID);
                 //Creating the RestaurantDetailsResponseAddress for the RestaurantList
                 RestaurantDetailsResponseAddress restaurantDetailsResponseAddress = new RestaurantDetailsResponseAddress()
-                        .id(UUID.fromString(restaurantEntity.getAddress().getUuid()))
+                        .id(addressID)
                         .city(restaurantEntity.getAddress().getCity())
                         .flatBuildingName(restaurantEntity.getAddress().getFlatBuilNo())
                         .locality(restaurantEntity.getAddress().getLocality())

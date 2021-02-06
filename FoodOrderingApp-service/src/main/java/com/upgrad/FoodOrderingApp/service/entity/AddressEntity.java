@@ -43,10 +43,16 @@ public class AddressEntity {
     private StateEntity stateEntity;
 
     @Column(name = "ACTIVE")
-    private int active;
+    private Integer active = 1;
 
     public AddressEntity(String addressId, String s, String someLocality, String someCity, String s1, StateEntity stateEntity) {
-
+        this.uuid = uuid;
+        this.flat_buil_number =s;
+        this.locality = someLocality;
+        this.city = someCity;
+        this.pincode = s1;
+        this.stateEntity = stateEntity;
+        return;
     }
 
     public AddressEntity() {
