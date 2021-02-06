@@ -35,27 +35,9 @@ public class CustomerService {
             throw new SignUpRestrictedException("SGR-002", "Invalid email-id format!");
         else if(!customerEntity.getContact_number().matches(validContactNumber) || customerEntity.getContact_number().length() != 10)
             throw new SignUpRestrictedException("SGR-003", "Invalid contact number!");
-        else if(customerEntity.getPassword().length() < 8)
+        else if(this.verifyPasswordStrength(customerEntity.getPassword()))
             throw new SignUpRestrictedException("SGR-004", "Weak password!");
         else {
-            //check password strength
-            boolean hasDigit = false;
-            boolean hasUpperCaseLetter = false;
-            boolean hasSpecialCharacter = false;
-            String sc = "#@$%&*!^";
-            for(int i = 0 ; i < customerEntity.getPassword().length() ; i++) {
-                if(Character.isDigit(customerEntity.getPassword().charAt(i)))
-                    hasDigit = true;
-                if(Character.isUpperCase(customerEntity.getPassword().charAt(i)))
-                    hasUpperCaseLetter = true;
-                if(sc.indexOf(customerEntity.getPassword().charAt(i)) >= 0)
-                    hasSpecialCharacter = true;
-                if(hasDigit && hasUpperCaseLetter && hasSpecialCharacter)
-                    break;
-            }
-            if(!hasDigit || !hasUpperCaseLetter || !hasSpecialCharacter)
-                throw new SignUpRestrictedException("SGR-004", "Weak password!");
-
             String[] temp = passwordCryptographyProvider.encrypt(customerEntity.getPassword());
             customerEntity.setSalt(temp[0]);
             customerEntity.setPassword(temp[1]);
@@ -117,45 +99,33 @@ public class CustomerService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public CustomerEntity updateCustomer(CustomerEntity customerEntity) {
+    public CustomerEntity updateCustomer(CustomerEntity customerEntity) throws UpdateCustomerException {
+        if(customerEntity.getFirstName() == null)
+            throw new UpdateCustomerException("UCR-002", "First name field should not be empty");
         customerDao.updateCustomer(customerEntity);
         return customerEntity;
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public CustomerEntity updateCustomerPassword(String oldPassword, String newPassword, CustomerEntity customerEntity) throws UpdateCustomerException {
+
         if(oldPassword == null || newPassword == null)
             throw new UpdateCustomerException("UCR-003", "No field should be empty");
-        if(newPassword.length() < 8)
-            throw new UpdateCustomerException("UCR-001", "Weak password!");
-        String encryptedPassword = PasswordCryptographyProvider.encrypt(oldPassword, customerEntity.getSalt());
-        if(encryptedPassword.equals(customerEntity.getPassword())) {
-            //check password strength
-            boolean hasDigit = false;
-            boolean hasUpperCaseLetter = false;
-            boolean hasSpecialCharacter = false;
-            String sc = "#@$%&*!^";
-            for(int i = 0 ; i < newPassword.length() ; i++) {
-                if(Character.isDigit(newPassword.charAt(i)))
-                    hasDigit = true;
-                if(Character.isUpperCase(newPassword.charAt(i)))
-                    hasUpperCaseLetter = true;
-                if(sc.indexOf(newPassword.charAt(i)) >= 0)
-                    hasSpecialCharacter = true;
-                if(hasDigit && hasUpperCaseLetter && hasSpecialCharacter)
-                    break;
-            }
-            if(!hasDigit || !hasUpperCaseLetter || !hasSpecialCharacter)
-                throw new UpdateCustomerException("UCR-001", "Weak password!");
 
-            String[] temp = passwordCryptographyProvider.encrypt(newPassword);
-            customerEntity.setSalt(temp[0]);
-            customerEntity.setPassword(temp[1]);
-            customerDao.updateCustomer(customerEntity);
-            return customerEntity;
-        }
-        else
+        //check old password validity
+        String encryptedPassword = PasswordCryptographyProvider.encrypt(oldPassword, customerEntity.getSalt());
+        if(!encryptedPassword.equals(customerEntity.getPassword()))
             throw new UpdateCustomerException("UCR-004", "Incorrect old password!");
+
+        //check new password strength
+        if(this.verifyPasswordStrength(newPassword))
+            throw new UpdateCustomerException("UCR-001", "Weak password!");
+
+        String[] temp = passwordCryptographyProvider.encrypt(newPassword);
+        customerEntity.setSalt(temp[0]);
+        customerEntity.setPassword(temp[1]);
+        customerDao.updateCustomer(customerEntity);
+        return customerEntity;
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -168,5 +138,26 @@ public class CustomerService {
         else if(customerAuthEntity.getLogoutAt() != null)
             throw new AuthorizationFailedException("ATHR-002", "Customer is logged out. Log in again to access this endpoint.");
         return customerAuthEntity.getCustomer();
+    }
+
+    public boolean verifyPasswordStrength(String password) {
+
+        if(password.length() < 8)
+            return true;
+        boolean hasDigit = false;
+        boolean hasUpperCaseLetter = false;
+        boolean hasSpecialCharacter = false;
+        String sc = "#@$%&*!^";
+        for(int i = 0 ; i < password.length() ; i++) {
+            if(Character.isDigit(password.charAt(i)))
+                hasDigit = true;
+            if(Character.isUpperCase(password.charAt(i)))
+                hasUpperCaseLetter = true;
+            if(sc.indexOf(password.charAt(i)) >= 0)
+                hasSpecialCharacter = true;
+            if(hasDigit && hasUpperCaseLetter && hasSpecialCharacter)
+                break;
+        }
+        return !hasDigit || !hasUpperCaseLetter || !hasSpecialCharacter;
     }
 }
