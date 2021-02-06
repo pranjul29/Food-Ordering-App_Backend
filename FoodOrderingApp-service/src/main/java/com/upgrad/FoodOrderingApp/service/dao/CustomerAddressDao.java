@@ -35,4 +35,9 @@ public class CustomerAddressDao {
             return null;
         }
     }
+
+    public CustomerAddressEntity saveCustomerAddress(CustomerAddressEntity customerAddressEntity){
+        entityManager.persist(customerAddressEntity);
+        return customerAddressEntity;
+    }
 }

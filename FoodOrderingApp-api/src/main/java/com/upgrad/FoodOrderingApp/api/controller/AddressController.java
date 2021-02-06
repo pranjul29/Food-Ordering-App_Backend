@@ -4,6 +4,7 @@ import com.upgrad.FoodOrderingApp.api.model.*;
 import com.upgrad.FoodOrderingApp.service.businness.AddressService;
 import com.upgrad.FoodOrderingApp.service.businness.CustomerService;
 import com.upgrad.FoodOrderingApp.service.entity.AddressEntity;
+import com.upgrad.FoodOrderingApp.service.entity.CustomerAddressEntity;
 import com.upgrad.FoodOrderingApp.service.entity.CustomerEntity;
 import com.upgrad.FoodOrderingApp.service.entity.StateEntity;
 import com.upgrad.FoodOrderingApp.service.exception.AddressNotFoundException;
@@ -29,16 +30,15 @@ public class AddressController {
     private CustomerService customerService;
 
     @RequestMapping(method = RequestMethod.POST, path = "/address", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<SaveAddressResponse> saveAddress(final SaveAddressRequest saveAddressRequest, @RequestHeader("authorization") final String authorization) throws SaveAddressException, AuthorizationFailedException, AddressNotFoundException {
+    public ResponseEntity<SaveAddressResponse> saveAddress(@RequestBody(required = false) final SaveAddressRequest saveAddressRequest,@RequestHeader("authorization") final String authorization) throws SaveAddressException, AuthorizationFailedException, AddressNotFoundException {
 
-        System.out.println(saveAddressRequest);
+        //System.out.println(saveAddressRequest);
         String accessToken = authorization.split("Bearer ")[1];
         CustomerEntity customerEntity = customerService.getCustomer(accessToken);
         //String state_uuid = saveAddressRequest.getStateUuid();
-        StateEntity stateEntity = addressService.getStateByUUID(saveAddressRequest.getStateUuid());
 
-        final AddressEntity newAddressEntity = new AddressEntity();
-        newAddressEntity.setState(stateEntity);
+        AddressEntity newAddressEntity = new AddressEntity();
+        //newAddressEntity.setState(stateEntity);
         newAddressEntity.setCity(saveAddressRequest.getCity());
         newAddressEntity.setFlatBuilNo(saveAddressRequest.getFlatBuildingName());
         newAddressEntity.setUuid(UUID.randomUUID().toString());
@@ -46,7 +46,12 @@ public class AddressController {
         newAddressEntity.setPincode(saveAddressRequest.getPincode());
         newAddressEntity.setActive(1);
 
-        AddressEntity addressEntity = addressService.saveAddress(newAddressEntity,customerEntity);
+        StateEntity stateEntity = addressService.getStateByUUID(saveAddressRequest.getStateUuid());
+
+        AddressEntity addressEntity = addressService.saveAddress(newAddressEntity,stateEntity);
+
+        CustomerAddressEntity customerAddressEntity = addressService.saveCustomerAddressEntity(customerEntity,addressEntity);
+
         SaveAddressResponse saveAddressResponse = new SaveAddressResponse().id(addressEntity.getUuid()).status("ADDRESS SUCCESSFULLY REGISTERED");
 
         return new ResponseEntity<SaveAddressResponse>(saveAddressResponse, HttpStatus.CREATED);
