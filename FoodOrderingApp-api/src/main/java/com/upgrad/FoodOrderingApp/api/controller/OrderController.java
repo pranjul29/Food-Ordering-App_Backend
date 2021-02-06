@@ -34,6 +34,9 @@ public class OrderController {
     @Autowired
     CustomerAuthService customerAuthService;
 
+    @Autowired
+    CustomerService customerService;
+
 
     @RequestMapping(method = RequestMethod.GET, path = "/order/coupon/{coupon_name}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     ResponseEntity<CouponDetailsResponse> getCouponByCouponName(@PathVariable("coupon_name") String couponName, @RequestHeader("authorization") final String authorization) throws AuthorizationFailedException, CouponNotFoundException, AuthenticationFailedException {
@@ -94,7 +97,7 @@ public class OrderController {
 
 
         OrderListCustomer orderListCustomer = new OrderListCustomer().firstName(customerAuthEntity.getCustomer().getFirstName()).id(UUID.fromString(customerAuthEntity.getCustomer().getUuid())).lastName(customerAuthEntity.getCustomer().getLastName()).emailAddress(customerAuthEntity.getCustomer().getEmail()).contactNumber(customerAuthEntity.getCustomer()
-                .getContactNumber());
+                .getContact_number());
 
         for (OrdersEntity order : orders) {
 
@@ -106,9 +109,9 @@ public class OrderController {
 
             OrderListPayment payment = new OrderListPayment().id(UUID.fromString(order.getPayment().getUuid())).paymentName(order.getPayment().getPaymentName());
 
-            OrderListAddressState addressState = new OrderListAddressState().id(UUID.fromString(order.getAddress().getState().getUuid())).stateName(order.getAddress().getState().getStateName());
+            OrderListAddressState addressState = new OrderListAddressState().id(UUID.fromString(order.getAddress().getState().getUuid())).stateName(order.getAddress().getState().getState_name());
 
-            OrderListAddress orderListAddress = new OrderListAddress().id(UUID.fromString(order.getAddress().getUuid())).flatBuildingName(order.getAddress().getFlatBuildingNumber()).locality(order.getAddress().getLocality()).city(order.getAddress().getCity()).pincode(order.getAddress().getPincode()).state(addressState);
+            OrderListAddress orderListAddress = new OrderListAddress().id(UUID.fromString(order.getAddress().getUuid())).flatBuildingName(order.getAddress().getFlatBuilNo()).locality(order.getAddress().getLocality()).city(order.getAddress().getCity()).pincode(order.getAddress().getPincode()).state(addressState);
 
 
             List<ItemQuantityResponse> itemQuantityResponsesList = new ArrayList<ItemQuantityResponse>();
@@ -140,6 +143,7 @@ public class OrderController {
         final BearerAuthDecoder authDecoder = new BearerAuthDecoder(authorization);
         String accessToken = authDecoder.getAccessToken();
         CustomerAuthEntity customerAuthEntity = customerAuthService.getCustomerByToken(accessToken);
+        CustomerEntity customerEntity = customerService.getCustomer(accessToken);
         Boolean isAuthorizedUser = customerAuthService.isAuthorizedUser(accessToken,customerAuthEntity);
 
 
@@ -164,7 +168,7 @@ public class OrderController {
 
         }
 
-        AddressEntity addressEntity = addressService.getAddressByUUID(saveOrderRequest.getAddressId());
+        AddressEntity addressEntity = addressService.getAddressByUUID(saveOrderRequest.getAddressId(),customerEntity);
 
         if (addressEntity == null) {
             throw new AddressNotFoundException("ANF-003", "No address by this id.");

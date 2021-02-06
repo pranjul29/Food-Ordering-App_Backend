@@ -82,7 +82,7 @@ final public class RestaurantTransformer {
     public  static RestaurantDetailsResponseAddress setDetailsAddress(RestaurantEntity restaurantEntity){
         RestaurantDetailsResponseAddress addressDetails = new RestaurantDetailsResponseAddress();
         addressDetails.setCity(restaurantEntity.getAddress().getCity());
-        addressDetails.setFlatBuildingName(restaurantEntity.getAddress().getFlatBuildingNumber());
+        addressDetails.setFlatBuildingName(restaurantEntity.getAddress().getFlatBuilNo());
         addressDetails.setCity(restaurantEntity.getAddress().getCity());
         addressDetails.setLocality(restaurantEntity.getAddress().getLocality());
         addressDetails.setPincode(restaurantEntity.getAddress().getPincode());
@@ -91,7 +91,7 @@ final public class RestaurantTransformer {
         //creating the state object to store state details
         RestaurantDetailsResponseAddressState state =  new RestaurantDetailsResponseAddressState();
         if(restaurantEntity.getAddress()!=null){
-            state.setStateName(restaurantEntity.getAddress().getState().getStateName());
+            state.setStateName(restaurantEntity.getAddress().getState().getState_name());
             state.setId(UUID.fromString(restaurantEntity.getAddress().getState().getUuid()));
             addressDetails.setState(state); // adding the state to address object
         }

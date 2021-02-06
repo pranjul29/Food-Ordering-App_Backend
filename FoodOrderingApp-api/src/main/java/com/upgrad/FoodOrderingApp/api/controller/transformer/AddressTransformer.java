@@ -13,7 +13,7 @@ final public class AddressTransformer {
        //iterate stateEntityList parameter and add to StatesListResponse
         stateEntityList.forEach(se -> {
             StatesList statesItem = new StatesList(); // create new entity add to the List
-            statesItem.setStateName(se.getStateName());
+            statesItem.setStateName(se.getState_name());
             statesItem.setId(UUID.fromString(se.getUuid()));
             stateListResponse.addStatesItem(statesItem);
         });
@@ -27,10 +27,10 @@ final public class AddressTransformer {
 
         for (AddressEntity ae : addressEntityList) {
             AddressListState addressListState = new AddressListState();
-            addressListState.setStateName(ae.getState().getStateName()); // get StateName from state obj
+            addressListState.setStateName(ae.getState().getState_name()); // get StateName from state obj
             // create AddressList Object and add it to the addressEntityList which is the final response
             AddressList addressList = new AddressList().id(UUID.fromString(ae.getUuid())).city(ae.getCity())
-                    .flatBuildingName(ae.getFlatBuildingNumber()).locality(ae.getLocality())
+                    .flatBuildingName(ae.getFlatBuilNo()).locality(ae.getLocality())
                     .pincode(ae.getPincode()).state(addressListState);
             addressListResponse.addAddressesItem(addressList);
         }

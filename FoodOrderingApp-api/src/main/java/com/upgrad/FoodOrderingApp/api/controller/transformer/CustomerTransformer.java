@@ -8,7 +8,7 @@ public class CustomerTransformer {
 
     public static  LoginResponse toLoginResponse(CustomerEntity customerEntity){
         LoginResponse loginResponse = new LoginResponse().id(customerEntity.getUuid()).firstName(customerEntity.getFirstName())
-                .lastName(customerEntity.getLastName()).emailAddress(customerEntity.getEmail()).contactNumber(customerEntity.getContactNumber())
+                .lastName(customerEntity.getLastName()).emailAddress(customerEntity.getEmail()).contactNumber(customerEntity.getContact_number())
                 .message("LOGGED IN SUCCESSFULLY");
         return loginResponse;
     }
