@@ -125,4 +125,8 @@ public class AddressService {
         List<StateEntity> stateEntities = stateDao.getAllStates();
         return stateEntities;
     }
+
+    public CustomerAddressEntity getCustomerAddress(CustomerEntity customerEntity, final AddressEntity addressEntity) {
+        return addressDao.getCustomerAddress(customerEntity,addressEntity);
+    }
 }

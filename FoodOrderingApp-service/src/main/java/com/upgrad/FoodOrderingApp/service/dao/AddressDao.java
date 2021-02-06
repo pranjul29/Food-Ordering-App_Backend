@@ -2,6 +2,7 @@ package com.upgrad.FoodOrderingApp.service.dao;
 
 import com.upgrad.FoodOrderingApp.service.entity.AddressEntity;
 import com.upgrad.FoodOrderingApp.service.entity.CustomerAddressEntity;
+import com.upgrad.FoodOrderingApp.service.entity.CustomerEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -47,5 +48,15 @@ public class AddressDao {
     public AddressEntity deleteAddress(AddressEntity addressEntity) {
         entityManager.remove(addressEntity);
         return addressEntity;
+    }
+
+    public CustomerAddressEntity getCustomerAddress(CustomerEntity customerEntity, final AddressEntity addressEntity) {
+        try {
+            return entityManager.createNamedQuery("CustomerAddressEntity.getCustomerAddressByAddressEntity", CustomerAddressEntity.class)
+                    .setParameter("customer", customerEntity).setParameter( "address", addressEntity)
+                    .getSingleResult();
+        } catch(NoResultException nre) {
+            return null;
+        }
     }
 }
