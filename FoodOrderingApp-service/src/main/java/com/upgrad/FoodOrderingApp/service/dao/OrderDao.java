@@ -1,70 +1,57 @@
 package com.upgrad.FoodOrderingApp.service.dao;
 
-
-import com.upgrad.FoodOrderingApp.service.entity.*;
+import com.upgrad.FoodOrderingApp.service.entity.AddressEntity;
+import com.upgrad.FoodOrderingApp.service.entity.CustomerEntity;
+import com.upgrad.FoodOrderingApp.service.entity.OrderEntity;
+//import com.upgrad.FoodOrderingApp.service.entity.OrdersEntity;
+import com.upgrad.FoodOrderingApp.service.entity.RestaurantEntity;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import java.util.ArrayList;
 import java.util.List;
+
+//This Class is created to access DB with respect to Order entity
 
 @Repository
 public class OrderDao {
 
     @PersistenceContext
-    EntityManager em;
+    private EntityManager entityManager;
 
-    public List<OrderItemEntity> getOrderDetails(ArrayList<Long> ordersid) {
+    //To save Order in the db
+    public OrderEntity saveOrder(OrderEntity ordersEntity){
+        entityManager.persist(ordersEntity);
+        return ordersEntity;
+    }
+
+    //To get List of order from the db Corresponding to Customers
+    public List<OrderEntity> getOrdersByCustomers(CustomerEntity customerEntity) {
         try {
-            return em.createNamedQuery("getOrderDetails", OrderItemEntity.class).setParameter("ordersid", ordersid).getResultList();
-        } catch (NoResultException nre) {
+            List<OrderEntity> ordersEntities = entityManager.createNamedQuery("getOrdersByCustomers",OrderEntity.class).setParameter("customer",customerEntity).getResultList();
+            return ordersEntities;
+        }catch (NoResultException nre){
             return null;
         }
     }
 
-    public List<OrderEntity> getOrders(String id) {
-
-        try {
-            return em.createNamedQuery("getOrders", OrderEntity.class).setParameter("custid", id).getResultList();
-        } catch (NoResultException nre) {
+    //To get list of OrdersEntity by the restaurant if no result then null is returned
+    public List<OrderEntity> getOrdersByRestaurant(RestaurantEntity restaurantEntity){
+        try{
+            List<OrderEntity> ordersEntities = entityManager.createNamedQuery("getOrdersByRestaurant",OrderEntity.class).setParameter("restaurant",restaurantEntity).getResultList();
+            return ordersEntities;
+        }catch (NoResultException nre){
             return null;
         }
     }
 
-    public AddressEntity getAddressByUUID(String uuid) {
-
-        try {
-            return em.createNamedQuery("getAddressByuuid", AddressEntity.class).setParameter("uuid", uuid).getSingleResult();
-        } catch (NoResultException nre) {
-            return null;
-        }
-    }
-
-    public RestaurantEntity getRestaurantByUUID(String uuid) {
-        try {
-            return em.createNamedQuery("getRestaurantByuuid", RestaurantEntity.class).setParameter("uuid", uuid).getSingleResult();
-        } catch (NoResultException nre) {
-            return null;
-        }
-    }
-
-    public OrderItemEntity saveOrderItem(OrderItemEntity orderItemEntities) {
-        em.persist(orderItemEntities);
-        return orderItemEntities;
-    }
-
-    public OrderEntity saveOrder(OrderEntity orderEntity) {
-        em.persist(orderEntity);
-        return orderEntity;
-    }
-
-
-    public ItemEntity getItemByuuid(String uuid) {
-        try {
-            return em.createNamedQuery("getItemByuuid", ItemEntity.class).setParameter("uuid", uuid).getSingleResult();
-        } catch (NoResultException nre) {
+    //To get all the order corresponding to the address
+    public List<OrderEntity> getOrdersByAddress(AddressEntity addressEntity) {
+        try{
+            List<OrderEntity> ordersEntities = entityManager.createNamedQuery("getOrdersByAddress",OrderEntity.class).setParameter("address",addressEntity).getResultList();
+            return ordersEntities;
+        }catch (NoResultException nre) {
             return null;
         }
     }

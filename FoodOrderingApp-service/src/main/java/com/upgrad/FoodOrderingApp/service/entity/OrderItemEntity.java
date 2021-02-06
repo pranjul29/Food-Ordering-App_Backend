@@ -5,9 +5,9 @@ import javax.persistence.*;
 @Entity
 @Table(name = "order_item")
 @NamedQueries({
-        @NamedQuery(name = "OrderItemEntity.getAllOrdersList", query = "SELECT oi from OrderItemEntity oi where oi.orders.id = :ordersId"),
-        @NamedQuery(name = "OrderItemEntity.getAllOrdersListByItemIds", query = "SELECT oi from OrderItemEntity oi where oi.item.id = :itemIds"),
-        @NamedQuery(name="getOrderDetails",query="select u from OrderItemEntity u where u.orders.id in :ordersid ")
+
+        @NamedQuery(name = "getOrderItemsByOrder",query = "SELECT o FROM OrderItemEntity o WHERE o.orders = :orders ORDER BY o.item.itemName ASC"),
+        @NamedQuery(name = "getItemsByOrders",query = "SELECT o FROM OrderItemEntity o WHERE o.orders = :ordersEntity"),
 
 })
 public class OrderItemEntity {

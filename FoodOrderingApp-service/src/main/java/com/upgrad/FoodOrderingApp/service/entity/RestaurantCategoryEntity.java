@@ -5,11 +5,11 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "restaurant_category")
-@NamedQueries(
-        {
-                @NamedQuery(name = "findRestaurantsByCategoryId", query = "select r from RestaurantCategoryEntity r where r.category.id=:categoryId"),
-        }
-)
+@NamedQueries({
+
+        @NamedQuery(name = "getCategoriesByRestaurant",query = "SELECT r FROM RestaurantCategoryEntity r WHERE r.restaurant= :restaurant ORDER BY r.category.categoryName ASC "),
+        @NamedQuery(name = "getRestaurantByCategory",query = "SELECT r FROM RestaurantCategoryEntity r WHERE r.category = :category ORDER BY r.restaurant.customerRating DESC "),
+})
 public class RestaurantCategoryEntity implements Serializable {
 
     @Id

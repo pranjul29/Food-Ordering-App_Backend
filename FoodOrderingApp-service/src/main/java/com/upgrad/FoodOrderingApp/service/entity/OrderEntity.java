@@ -66,7 +66,7 @@ public class OrderEntity implements Serializable {
     @NotNull
     private RestaurantEntity restaurant;
 
-    public OrderEntity(){
+    public OrderEntity(String orderId, double bill, CouponEntity couponEntity, double discount, Date orderDate, PaymentEntity paymentEntity, CustomerEntity customerEntity, AddressEntity addressEntity, RestaurantEntity restaurantEntity){
 
     }
 
@@ -80,6 +80,10 @@ public class OrderEntity implements Serializable {
         this.customer = customerEntity;
         this.address = addressEntity;
         this.restaurant = restaurantEntity;
+
+    }
+
+    public OrderEntity() {
 
     }
 

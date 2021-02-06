@@ -13,9 +13,9 @@ import java.util.UUID;
 @Entity
 @Table(name = "coupon")
 @NamedQueries({
-  @NamedQuery(  name="couponByname", query="select u from CouponEntity u where u.couponName=:couponName"),
-  @NamedQuery (name="getCouponByUUID", query="select u from CouponEntity  u where u.uuid=:uuid")
-        })
+        @NamedQuery(name = "getCouponByCouponName",query = "SELECT c FROM CouponEntity c WHERE c.couponName = :coupon_name"),
+        @NamedQuery(name = "getCouponByCouponId",query = "SELECT c FROM  CouponEntity c WHERE c.uuid = :uuid"),
+})
 public class CouponEntity implements Serializable {
 
     @Id
@@ -36,6 +36,9 @@ public class CouponEntity implements Serializable {
 
       public CouponEntity(){}
     public CouponEntity(String couponId, String myCoupon, int i) {
+          this.uuid = couponId;
+          this.couponName = myCoupon;
+          this.percent = i;
     }
 
     public int getPercent() {
@@ -70,15 +73,15 @@ public class CouponEntity implements Serializable {
         this.uuid = uuid;
     }
 
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder().append(this).hashCode();
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
-    }
+//    @Override
+//    public int hashCode() {
+//        return new HashCodeBuilder().append(this).hashCode();
+//    }
+//
+//    @Override
+//    public String toString() {
+//        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+//    }
 
 
 }
