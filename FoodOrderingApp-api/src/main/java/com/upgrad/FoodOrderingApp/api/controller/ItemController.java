@@ -37,9 +37,9 @@ public class ItemController {
 
         RestaurantEntity restaurantEntity = restaurantService.restaurantByUUID(restaurant_id);
 
-        if (restaurantEntity == null) {
-            throw new RestaurantNotFoundException("RNF-001", "No restaurant by this id");
-        }
+//        if (restaurantEntity == null) {
+//            throw new RestaurantNotFoundException("RNF-001", "No restaurant by this id");
+//        }
         List<ItemEntity> itemEntityList = itemService.getItemsByPopularity(restaurantEntity);
         ItemListResponse itemListResponse = new ItemListResponse();
 
