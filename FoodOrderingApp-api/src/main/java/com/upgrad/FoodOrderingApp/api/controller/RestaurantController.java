@@ -1,3 +1,4 @@
+/*
 package com.upgrad.FoodOrderingApp.api.controller;
 
 
@@ -44,9 +45,11 @@ public class RestaurantController {
 
 
 
-    /* The method handles get All Restaurants request
-    & produces response in RestaurantListResponse and returns list of restaurant with details from the db. If error returns error code and error message.
     */
+/* The method handles get All Restaurants request
+    & produces response in RestaurantListResponse and returns list of restaurant with details from the db. If error returns error code and error message.
+    *//*
+
     @CrossOrigin
     @RequestMapping(method = RequestMethod.GET,path = "",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<RestaurantListResponse>getAllRestaurants(){
@@ -107,9 +110,11 @@ public class RestaurantController {
 
 
 
-    /* The method handles get Restaurant By Name. It takes Restaurant name as the path variable.
-    & produces response in RestaurantListResponse and returns list of restaurant with details from the db. If error returns error code and error message.
     */
+/* The method handles get Restaurant By Name. It takes Restaurant name as the path variable.
+    & produces response in RestaurantListResponse and returns list of restaurant with details from the db. If error returns error code and error message.
+    *//*
+
     @CrossOrigin
     @RequestMapping(method = RequestMethod.GET,path = "/name/{restaurant_name}",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<RestaurantListResponse> getRestaurantByName (@PathVariable(value = "restaurant_name") final String restaurantName)throws RestaurantNotFoundException {
@@ -175,9 +180,11 @@ public class RestaurantController {
     }
 
 
-    /* The method handles get Restaurant By Category Id. It takes category_id as the path variable.
+    */
+/* The method handles get Restaurant By Category Id. It takes category_id as the path variable.
    & produces response in RestaurantListResponse and returns list of restaurant with details from the db. If error returns error code and error message.
-   */
+   *//*
+
     @CrossOrigin
     @RequestMapping(method = RequestMethod.GET,path = "/category/{category_id}",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<RestaurantListResponse> getRestaurantByCategoryId(@PathVariable(value = "category_id")String categoryId) throws CategoryNotFoundException {
@@ -238,9 +245,11 @@ public class RestaurantController {
     }
 
 
-    /* The method handles get Restaurant By Restaurant Id. It takes restaurant_id as the path variable.
+    */
+/* The method handles get Restaurant By Restaurant Id. It takes restaurant_id as the path variable.
    & produces response in RestaurantDetailsResponse and returns details of restaurant from the db. If error returns error code and error message.
-   */
+   *//*
+
     @CrossOrigin
     @RequestMapping(method = RequestMethod.GET,path = "/{restaurant_id}",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<RestaurantDetailsResponse>getRestaurantByRestaurantId(@PathVariable(value = "restaurant_id") final String restaurantUuid)throws RestaurantNotFoundException{
@@ -307,9 +316,11 @@ public class RestaurantController {
         return new ResponseEntity<RestaurantDetailsResponse>(restaurantDetailsResponse,HttpStatus.OK);
     }
 
-    /* The method handles update Restaurant Details. It takes restaurant_id as the path variable  and authorization in header and also customer rating.
-    & produces response in RestaurantUpdatedResponse and returns UUID of Updated restaurant from the db and successful message. If error returns error code and error message.
     */
+/* The method handles update Restaurant Details. It takes restaurant_id as the path variable  and authorization in header and also customer rating.
+    & produces response in RestaurantUpdatedResponse and returns UUID of Updated restaurant from the db and successful message. If error returns error code and error message.
+    *//*
+
     @CrossOrigin
     @RequestMapping(method = RequestMethod.PUT,path = "/{restaurant_id}",params = "customer_rating",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<RestaurantUpdatedResponse> updateRestaurantDetails(@RequestHeader ("authorization")final String authorization,@PathVariable(value = "restaurant_id")final String restaurantUuid,@RequestParam(value = "customer_rating")final Double customerRating) throws AuthorizationFailedException, RestaurantNotFoundException, InvalidRatingException {
@@ -334,3 +345,4 @@ public class RestaurantController {
         return new ResponseEntity<RestaurantUpdatedResponse>(restaurantUpdatedResponse,HttpStatus.OK);
     }
 }
+*/

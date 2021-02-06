@@ -1,3 +1,4 @@
+/*
 package com.upgrad.FoodOrderingApp.api.controller;
 
 
@@ -45,9 +46,11 @@ public class OrderController {
     @Autowired
     ItemService itemService; // Handles all the Service Related Item.
 
-    /* The method handles get Coupon By CouponName request.It takes authorization from the header and coupon name as the path vataible.
-    & produces response in CouponDetailsResponse and returns UUID,Coupon Name and Percentage of coupon present in the DB and if error returns error code and error Message.
     */
+/* The method handles get Coupon By CouponName request.It takes authorization from the header and coupon name as the path vataible.
+    & produces response in CouponDetailsResponse and returns UUID,Coupon Name and Percentage of coupon present in the DB and if error returns error code and error Message.
+    *//*
+
     @CrossOrigin
     @RequestMapping(method = RequestMethod.GET,path = "/coupon/{coupon_name}",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<CouponDetailsResponse> getCouponByCouponName(@RequestHeader(value = "authorization") final String authorization, @PathVariable(value = "coupon_name")final String couponName) throws AuthorizationFailedException, CouponNotFoundException {
@@ -71,9 +74,11 @@ public class OrderController {
 
 
 
-    /* The method handles save Order request.It takes authorization from the header and other details in SaveOrderRequest.
-    & produces response in SaveOrderResponse and returns UUID and successful message and if error returns error code and error Message.
     */
+/* The method handles save Order request.It takes authorization from the header and other details in SaveOrderRequest.
+    & produces response in SaveOrderResponse and returns UUID and successful message and if error returns error code and error Message.
+    *//*
+
     @CrossOrigin
     @RequestMapping(method = RequestMethod.POST,path = "",consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<SaveOrderResponse> saveOrder(@RequestHeader(value = "authorization")final String authorization, @RequestBody(required = false) final SaveOrderRequest saveOrderRequest) throws AuthorizationFailedException, PaymentMethodNotFoundException, AddressNotFoundException, RestaurantNotFoundException, CouponNotFoundException ,ItemNotFoundException{
@@ -139,9 +144,11 @@ public class OrderController {
 
 
 
-    /* The method handles past order request of customer.It takes authorization from the header
-    & produces response in CustomerOrderResponse and returns details of all the past order arranged in date wise and if error returns error code and error Message.
     */
+/* The method handles past order request of customer.It takes authorization from the header
+    & produces response in CustomerOrderResponse and returns details of all the past order arranged in date wise and if error returns error code and error Message.
+    *//*
+
     @CrossOrigin
     @RequestMapping(method = RequestMethod.GET,path = "",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<CustomerOrderResponse> getPastOrderOfUser(@RequestHeader(value = "authorization")final String authorization) throws AuthorizationFailedException {
@@ -238,3 +245,4 @@ public class OrderController {
 
 
 }
+*/
