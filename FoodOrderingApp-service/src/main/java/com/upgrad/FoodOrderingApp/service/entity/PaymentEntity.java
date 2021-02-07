@@ -25,7 +25,9 @@ public class PaymentEntity {
     @NotNull
     private String paymentName;
 public PaymentEntity(){}
-    public PaymentEntity(String paymentId, String spmePayment) {
+    public PaymentEntity(String paymentId, String somePayment) {
+        this.uuid = paymentId;
+        this.paymentName = somePayment;
     }
 
     public Long getId() {

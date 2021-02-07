@@ -14,14 +14,14 @@ public class CouponBusinessService {
     CouponDao couponDao;
 
     public CouponEntity getCouponByCouponName(String couponName) {
-        return couponDao.getCouponByName(couponName);
+        return couponDao.getCouponByCouponName(couponName);
     }
 
-    public CustomerAuthEntity getCustomerByAccessToken(String access_token) {
-        return couponDao.getCustomerByAccessToken(access_token);
-    }
+//    public CustomerAuthEntity getCustomerByAccessToken(String access_token) {
+//        return couponDao.getCustomerByAccessToken(access_token);
+//    }
 
     public CouponEntity getCouponByUUID(String uuid) {
-        return couponDao.getCouponByUUID(uuid);
+        return couponDao.getCouponByCouponId(uuid);
     }
 }

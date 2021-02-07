@@ -4,6 +4,9 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "category_item")
+@NamedQueries({
+        @NamedQuery(name = "getItemsByCategory",query = "SELECT c FROM CategoryItemEntity c WHERE c.category = :category ORDER BY LOWER(c.item.itemName) ASC "),
+})
 public class CategoryItemEntity {
     @Id
     @Column(name = "ID")

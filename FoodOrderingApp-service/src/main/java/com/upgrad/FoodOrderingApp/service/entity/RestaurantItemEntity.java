@@ -5,6 +5,9 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "restaurant_item")
+@NamedQueries({
+        @NamedQuery(name = "getItemsByRestaurant",query = "SELECT r FROM RestaurantItemEntity r WHERE r.restaurant = :restaurant ORDER BY LOWER(r.item.itemName) ASC "),
+})
 public class RestaurantItemEntity implements Serializable {
 
     @Id

@@ -15,7 +15,7 @@ public class CustomerAuthDao {
 
     public CustomerAuthEntity getCustomerByToken(String accessToken) {
         try{
-            CustomerAuthEntity customerAuthEntity = entityManager.createNamedQuery("CustomerAuthEntity.getCustomerAuthToken",CustomerAuthEntity.class).setParameter("accessToken",accessToken).getSingleResult();
+            CustomerAuthEntity customerAuthEntity = entityManager.createNamedQuery("customerAuthByAccessToken",CustomerAuthEntity.class).setParameter("accessToken",accessToken).getSingleResult();
             return customerAuthEntity;
         }catch (NoResultException nre){
             return null;
@@ -25,7 +25,7 @@ public class CustomerAuthDao {
 
     public CustomerAuthEntity getCustomerAuthByAccessToken(String accessToken) {
         try {
-            return entityManager.createNamedQuery("CustomerAuthEntity.getCustomerAuthToken", CustomerAuthEntity.class).setParameter("accessToken", accessToken).getSingleResult();
+            return entityManager.createNamedQuery("customerAuthByAccessToken", CustomerAuthEntity.class).setParameter("accessToken", accessToken).getSingleResult();
         } catch (NoResultException nre) {
             return null;
         }
@@ -33,7 +33,7 @@ public class CustomerAuthDao {
 
     public CustomerAuthEntity getCustomerById(Integer customer_id) {
         try{
-            CustomerAuthEntity customerAuthEntity = entityManager.createNamedQuery("CustomerAuthEntity.getCustomerById",CustomerAuthEntity.class).setParameter("customer_id",customer_id).getSingleResult();
+            CustomerAuthEntity customerAuthEntity = entityManager.createNamedQuery("customerAuthByCustomerId",CustomerAuthEntity.class).setParameter("customer_id",customer_id).getSingleResult();
             return customerAuthEntity;
         }catch (NoResultException nre){
             return null;

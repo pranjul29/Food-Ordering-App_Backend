@@ -1,4 +1,3 @@
-/*
 package com.upgrad.FoodOrderingApp.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -374,6 +373,9 @@ public class OrderControllerTest {
                 .andReturn().getResponse().getContentAsString();
 
         final CustomerOrderResponse customerOrderResponse = new ObjectMapper().readValue(responseString, CustomerOrderResponse.class);
+        System.out.println(orderEntity.getUuid());
+        System.out.println(orderEntity.getCustomer());
+        System.out.println(orderEntity.getAddress());
         assertEquals(customerOrderResponse.getOrders().size(), 1);
         assertEquals(customerOrderResponse.getOrders().get(0).getId().toString(), orderEntity.getUuid());
         assertEquals(customerOrderResponse.getOrders().get(0).getId().toString(), orderEntity.getUuid());
@@ -611,4 +613,4 @@ public class OrderControllerTest {
     }
 
 
-}*/
+}

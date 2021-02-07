@@ -1,4 +1,3 @@
-/*
 package com.upgrad.FoodOrderingApp.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -136,6 +135,7 @@ public class RestaurantControllerTest {
 
         final RestaurantListResponse restaurantListResponse = new ObjectMapper().readValue(responseString, RestaurantListResponse.class);
         assertEquals(restaurantListResponse.getRestaurants().size(), 1);
+
 
         final RestaurantList restaurantList = restaurantListResponse.getRestaurants().get(0);
         assertEquals(restaurantList.getId().toString(), restaurantEntity.getUuid());
@@ -467,4 +467,4 @@ public class RestaurantControllerTest {
         restaurantEntity.setRestaurantName("Famous Restaurant");
         return restaurantEntity;
     }
-}*/
+}

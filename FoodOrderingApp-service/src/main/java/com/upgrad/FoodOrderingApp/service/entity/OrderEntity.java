@@ -66,20 +66,23 @@ public class OrderEntity implements Serializable {
     @NotNull
     private RestaurantEntity restaurant;
 
-    public OrderEntity(){
+//    public OrderEntity(String orderId, double bill, CouponEntity couponEntity, double discount, Date orderDate, PaymentEntity paymentEntity, CustomerEntity customerEntity, AddressEntity addressEntity, RestaurantEntity restaurantEntity){
+//
+//    }
 
-    }
-
-    public OrderEntity(String uuid, Double bill, CouponEntity couponEntity, Double discount, Timestamp orderDate, PaymentEntity paymentEntity, CustomerEntity customerEntity, AddressEntity addressEntity, RestaurantEntity restaurantEntity) {
+    public OrderEntity(String uuid, Double bill, CouponEntity couponEntity, Double discount, Date orderDate, PaymentEntity paymentEntity, CustomerEntity customerEntity, AddressEntity addressEntity, RestaurantEntity restaurantEntity) {
         this.uuid = uuid;
         this.bill = bill;
         this.coupon = couponEntity;
         this.discount = discount;
-        this.date = orderDate;
+        this.date = new Timestamp(orderDate.getTime());
         this.payment = paymentEntity;
         this.customer = customerEntity;
         this.address = addressEntity;
         this.restaurant = restaurantEntity;
+    }
+
+    public OrderEntity() {
 
     }
 
