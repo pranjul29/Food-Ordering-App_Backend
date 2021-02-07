@@ -18,9 +18,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
-
-// Order Controller Handles all  the Order related endpoints
-
 @CrossOrigin
 @RestController
 @RequestMapping("/order")
