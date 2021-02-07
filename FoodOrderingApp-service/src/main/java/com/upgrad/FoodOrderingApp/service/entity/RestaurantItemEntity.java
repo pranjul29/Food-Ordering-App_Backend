@@ -6,44 +6,47 @@ import java.io.Serializable;
 @Entity
 @Table(name = "restaurant_item")
 @NamedQueries({
-        @NamedQuery(name = "getItemsByRestaurant",query = "SELECT r FROM RestaurantItemEntity r WHERE r.restaurant = :restaurant ORDER BY LOWER(r.item.itemName) ASC "),
+  @NamedQuery(
+      name = "getItemsByRestaurant",
+      query =
+          "SELECT r FROM RestaurantItemEntity r WHERE r.restaurant = :restaurant ORDER BY LOWER(r.item.itemName) ASC "),
 })
 public class RestaurantItemEntity implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
-    private long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "ID")
+  private long id;
 
-    @ManyToOne
-    @JoinColumn(name = "ITEM_ID")
-    private ItemEntity item;
+  @ManyToOne
+  @JoinColumn(name = "ITEM_ID")
+  private ItemEntity item;
 
-    @ManyToOne
-    @JoinColumn(name = "RESTAURANT_ID")
-    private RestaurantEntity restaurant;
+  @ManyToOne
+  @JoinColumn(name = "RESTAURANT_ID")
+  private RestaurantEntity restaurant;
 
-    public long getId() {
-        return id;
-    }
+  public long getId() {
+    return id;
+  }
 
-    public void setId(long id) {
-        this.id = id;
-    }
+  public void setId(long id) {
+    this.id = id;
+  }
 
-    public ItemEntity getItem() {
-        return item;
-    }
+  public ItemEntity getItem() {
+    return item;
+  }
 
-    public void setItem(ItemEntity item) {
-        this.item = item;
-    }
+  public void setItem(ItemEntity item) {
+    this.item = item;
+  }
 
-    public RestaurantEntity getRestaurant() {
-        return restaurant;
-    }
+  public RestaurantEntity getRestaurant() {
+    return restaurant;
+  }
 
-    public void setRestaurant(RestaurantEntity restaurant) {
-        this.restaurant = restaurant;
-    }
+  public void setRestaurant(RestaurantEntity restaurant) {
+    this.restaurant = restaurant;
+  }
 }

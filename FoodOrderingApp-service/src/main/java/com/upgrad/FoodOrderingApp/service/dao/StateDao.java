@@ -11,26 +11,26 @@ import java.util.List;
 @Repository
 public class StateDao {
 
-    @Autowired
-    private EntityManager entityManager;
+  @Autowired private EntityManager entityManager;
 
-    public StateEntity getStateByUUID(String stateUUID){
-        try {
-            return entityManager
-                    .createNamedQuery("stateByUUID", StateEntity.class)
-                    .setParameter("uuid", stateUUID)
-                    .getSingleResult();
-        } catch (NoResultException ex) {
-            return null;
-        }
+  public StateEntity getStateByUUID(String stateUUID) {
+    try {
+      return entityManager
+          .createNamedQuery("stateByUUID", StateEntity.class)
+          .setParameter("uuid", stateUUID)
+          .getSingleResult();
+    } catch (NoResultException ex) {
+      return null;
     }
+  }
 
-    public List<StateEntity> getAllStates() {
-        try {
-            List<StateEntity> stateEntities = entityManager.createNamedQuery("getAllStates",StateEntity.class).getResultList();
-            return stateEntities;
-        }catch (NoResultException nre){
-            return null;
-        }
+  public List<StateEntity> getAllStates() {
+    try {
+      List<StateEntity> stateEntities =
+          entityManager.createNamedQuery("getAllStates", StateEntity.class).getResultList();
+      return stateEntities;
+    } catch (NoResultException nre) {
+      return null;
     }
+  }
 }

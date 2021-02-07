@@ -1,6 +1,5 @@
 package com.upgrad.FoodOrderingApp.api.controller;
 
-
 import com.upgrad.FoodOrderingApp.api.model.PaymentListResponse;
 import com.upgrad.FoodOrderingApp.api.model.PaymentResponse;
 import com.upgrad.FoodOrderingApp.service.businness.PaymentService;
@@ -21,22 +20,26 @@ import java.util.UUID;
 @RequestMapping("/")
 public class PaymentController {
 
-    @Autowired
-    PaymentService paymentService;
+  @Autowired PaymentService paymentService;
 
-    @RequestMapping(method = RequestMethod.GET, path = "/payment", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<PaymentListResponse> getAllPaymentMethods() {
+  @RequestMapping(
+      method = RequestMethod.GET,
+      path = "/payment",
+      produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+  public ResponseEntity<PaymentListResponse> getAllPaymentMethods() {
 
-        List<PaymentEntity> paymentEntityList = paymentService.getAllPaymentMethods();
+    List<PaymentEntity> paymentEntityList = paymentService.getAllPaymentMethods();
 
-        List<PaymentResponse> paymentResponseList = new ArrayList<PaymentResponse>();
-        for (PaymentEntity paymentEntity : paymentEntityList) {
-            PaymentResponse paymentResponse = new PaymentResponse().id(UUID.fromString(paymentEntity.getUuid())).paymentName(paymentEntity.getPaymentName());
-            paymentResponseList.add(paymentResponse);
-        }
-        PaymentListResponse paymentListResponse = new PaymentListResponse().paymentMethods(paymentResponseList);
-        return new ResponseEntity<>(paymentListResponse, HttpStatus.OK);
+    List<PaymentResponse> paymentResponseList = new ArrayList<PaymentResponse>();
+    for (PaymentEntity paymentEntity : paymentEntityList) {
+      PaymentResponse paymentResponse =
+          new PaymentResponse()
+              .id(UUID.fromString(paymentEntity.getUuid()))
+              .paymentName(paymentEntity.getPaymentName());
+      paymentResponseList.add(paymentResponse);
     }
-
-
+    PaymentListResponse paymentListResponse =
+        new PaymentListResponse().paymentMethods(paymentResponseList);
+    return new ResponseEntity<>(paymentListResponse, HttpStatus.OK);
+  }
 }

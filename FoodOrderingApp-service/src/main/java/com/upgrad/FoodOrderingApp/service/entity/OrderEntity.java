@@ -1,169 +1,181 @@
 package com.upgrad.FoodOrderingApp.service.entity;
 
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.time.ZonedDateTime;
 import java.util.Date;
 
-//This Class represents the Orders table in the DB
+// This Class represents the Orders table in the DB
 
 @Entity
-@Table(name = "orders",uniqueConstraints = {@UniqueConstraint(columnNames = {"uuid"})})
+@Table(
+    name = "orders",
+    uniqueConstraints = {@UniqueConstraint(columnNames = {"uuid"})})
 @NamedQueries({
-        @NamedQuery(name = "getOrdersByCustomers",query = "SELECT o FROM OrderEntity o WHERE o.customer = :customer ORDER BY o.date DESC "),
-        @NamedQuery(name = "getOrdersByRestaurant",query = "SELECT o FROM OrderEntity o WHERE o.restaurant = :restaurant"),
-        @NamedQuery(name = "getOrdersByAddress",query = "SELECT o FROM OrderEntity o WHERE o.address = :address")
+  @NamedQuery(
+      name = "getOrdersByCustomers",
+      query = "SELECT o FROM OrderEntity o WHERE o.customer = :customer ORDER BY o.date DESC "),
+  @NamedQuery(
+      name = "getOrdersByRestaurant",
+      query = "SELECT o FROM OrderEntity o WHERE o.restaurant = :restaurant"),
+  @NamedQuery(
+      name = "getOrdersByAddress",
+      query = "SELECT o FROM OrderEntity o WHERE o.address = :address")
 })
 public class OrderEntity implements Serializable {
 
+  @Id
+  @Column(name = "id")
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer id;
 
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+  @Column(name = "uuid")
+  @Size(max = 200)
+  @NotNull
+  private String uuid;
 
-    @Column(name = "uuid")
-    @Size(max = 200)
-    @NotNull
-    private String uuid;
+  @Column(name = "bill")
+  @NotNull
+  private double bill;
 
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "coupon_id")
+  private CouponEntity coupon;
 
-    @Column(name = "bill")
-    @NotNull
-    private double bill;
+  @Column(name = "discount")
+  private double discount;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "coupon_id")
-    private CouponEntity coupon;
+  @Column(name = "date")
+  @NotNull
+  private Timestamp date;
 
-    @Column(name = "discount")
-    private double discount;
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "payment_id")
+  private PaymentEntity payment;
 
-    @Column(name = "date")
-    @NotNull
-    private Timestamp  date;
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "customer_id")
+  @NotNull
+  private CustomerEntity customer;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "payment_id")
-    private PaymentEntity payment;
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "address_id")
+  @NotNull
+  private AddressEntity address;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "customer_id")
-    @NotNull
-    private CustomerEntity customer;
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "restaurant_id")
+  @NotNull
+  private RestaurantEntity restaurant;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "address_id")
-    @NotNull
-    private AddressEntity address;
+  //    public OrderEntity(String orderId, double bill, CouponEntity couponEntity, double discount,
+  // Date orderDate, PaymentEntity paymentEntity, CustomerEntity customerEntity, AddressEntity
+  // addressEntity, RestaurantEntity restaurantEntity){
+  //
+  //    }
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "restaurant_id")
-    @NotNull
-    private RestaurantEntity restaurant;
+  public OrderEntity(
+      String uuid,
+      Double bill,
+      CouponEntity couponEntity,
+      Double discount,
+      Date orderDate,
+      PaymentEntity paymentEntity,
+      CustomerEntity customerEntity,
+      AddressEntity addressEntity,
+      RestaurantEntity restaurantEntity) {
+    this.uuid = uuid;
+    this.bill = bill;
+    this.coupon = couponEntity;
+    this.discount = discount;
+    this.date = new Timestamp(orderDate.getTime());
+    this.payment = paymentEntity;
+    this.customer = customerEntity;
+    this.address = addressEntity;
+    this.restaurant = restaurantEntity;
+  }
 
-//    public OrderEntity(String orderId, double bill, CouponEntity couponEntity, double discount, Date orderDate, PaymentEntity paymentEntity, CustomerEntity customerEntity, AddressEntity addressEntity, RestaurantEntity restaurantEntity){
-//
-//    }
+  public OrderEntity() {}
 
-    public OrderEntity(String uuid, Double bill, CouponEntity couponEntity, Double discount, Date orderDate, PaymentEntity paymentEntity, CustomerEntity customerEntity, AddressEntity addressEntity, RestaurantEntity restaurantEntity) {
-        this.uuid = uuid;
-        this.bill = bill;
-        this.coupon = couponEntity;
-        this.discount = discount;
-        this.date = new Timestamp(orderDate.getTime());
-        this.payment = paymentEntity;
-        this.customer = customerEntity;
-        this.address = addressEntity;
-        this.restaurant = restaurantEntity;
-    }
+  public Integer getId() {
+    return id;
+  }
 
-    public OrderEntity() {
+  public void setId(Integer id) {
+    this.id = id;
+  }
 
-    }
+  public String getUuid() {
+    return uuid;
+  }
 
+  public void setUuid(String uuid) {
+    this.uuid = uuid;
+  }
 
-    public Integer getId() {
-        return id;
-    }
+  public Double getBill() {
+    return bill;
+  }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+  public void setBill(Float bill) {
+    this.bill = bill;
+  }
 
-    public String getUuid() {
-        return uuid;
-    }
+  public CouponEntity getCoupon() {
+    return coupon;
+  }
 
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
-    }
+  public void setCoupon(CouponEntity coupon) {
+    this.coupon = coupon;
+  }
 
-    public Double getBill() {
-        return bill;
-    }
+  public Double getDiscount() {
+    return discount;
+  }
 
-    public void setBill(Float bill) {
-        this.bill = bill;
-    }
+  public void setDiscount(Double discount) {
+    this.discount = discount;
+  }
 
-    public CouponEntity getCoupon() {
-        return coupon;
-    }
+  public Timestamp getDate() {
+    return date;
+  }
 
-    public void setCoupon(CouponEntity coupon) {
-        this.coupon = coupon;
-    }
+  public void setDate(Timestamp date) {
+    this.date = date;
+  }
 
-    public Double getDiscount() {
-        return discount;
-    }
+  public PaymentEntity getPayment() {
+    return payment;
+  }
 
-    public void setDiscount(Double discount) {
-        this.discount = discount;
-    }
+  public void setPayment(PaymentEntity payment) {
+    this.payment = payment;
+  }
 
-    public Timestamp getDate() {
-        return date;
-    }
+  public CustomerEntity getCustomer() {
+    return customer;
+  }
 
-    public void setDate(Timestamp date) {
-        this.date = date;
-    }
+  public void setCustomer(CustomerEntity customer) {
+    this.customer = customer;
+  }
 
-    public PaymentEntity getPayment() {
-        return payment;
-    }
+  public AddressEntity getAddress() {
+    return address;
+  }
 
-    public void setPayment(PaymentEntity payment) {
-        this.payment = payment;
-    }
+  public void setAddress(AddressEntity address) {
+    this.address = address;
+  }
 
-    public CustomerEntity getCustomer() {
-        return customer;
-    }
+  public RestaurantEntity getRestaurant() {
+    return restaurant;
+  }
 
-    public void setCustomer(CustomerEntity customer) {
-        this.customer = customer;
-    }
-
-    public AddressEntity getAddress() {
-        return address;
-    }
-
-    public void setAddress(AddressEntity address) {
-        this.address = address;
-    }
-
-    public RestaurantEntity getRestaurant() {
-        return restaurant;
-    }
-
-    public void setRestaurant(RestaurantEntity restaurant) {
-        this.restaurant = restaurant;
-    }
+  public void setRestaurant(RestaurantEntity restaurant) {
+    this.restaurant = restaurant;
+  }
 }

@@ -28,33 +28,35 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class PaymentControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+  @Autowired private MockMvc mockMvc;
 
-    @MockBean
-    private PaymentService mockPaymentService;
+  @MockBean private PaymentService mockPaymentService;
 
-    //This test case passes when you are able to retrieve all payment methods that exist in the database.
-    @Test
-    public void shouldGetAllPaymentMethods() throws Exception {
-        final PaymentEntity paymentEntity = new PaymentEntity();
-        final String paymentId = UUID.randomUUID().toString();
-        paymentEntity.setUuid(paymentId);
-        paymentEntity.setPaymentName("samplePaymentName");
+  // This test case passes when you are able to retrieve all payment methods that exist in the
+  // database.
+  @Test
+  public void shouldGetAllPaymentMethods() throws Exception {
+    final PaymentEntity paymentEntity = new PaymentEntity();
+    final String paymentId = UUID.randomUUID().toString();
+    paymentEntity.setUuid(paymentId);
+    paymentEntity.setPaymentName("samplePaymentName");
 
-        when(mockPaymentService.getAllPaymentMethods())
-                .thenReturn(Collections.singletonList(paymentEntity));
+    when(mockPaymentService.getAllPaymentMethods())
+        .thenReturn(Collections.singletonList(paymentEntity));
 
-        final String response = mockMvc
-                .perform(get("/payment").contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-                .andExpect(status().isOk())
-                .andReturn().getResponse().getContentAsString();
+    final String response =
+        mockMvc
+            .perform(get("/payment").contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(status().isOk())
+            .andReturn()
+            .getResponse()
+            .getContentAsString();
 
-        final PaymentListResponse paymentResponses = new ObjectMapper().readValue(response, PaymentListResponse.class);
-        assertEquals(paymentResponses.getPaymentMethods().size(), 1);
-        assertEquals(paymentResponses.getPaymentMethods().get(0).getId().toString(), paymentId);
-        assertEquals(paymentResponses.getPaymentMethods().get(0).getPaymentName(), "samplePaymentName");
-        verify(mockPaymentService, times(1)).getAllPaymentMethods();
-    }
-
+    final PaymentListResponse paymentResponses =
+        new ObjectMapper().readValue(response, PaymentListResponse.class);
+    assertEquals(paymentResponses.getPaymentMethods().size(), 1);
+    assertEquals(paymentResponses.getPaymentMethods().get(0).getId().toString(), paymentId);
+    assertEquals(paymentResponses.getPaymentMethods().get(0).getPaymentName(), "samplePaymentName");
+    verify(mockPaymentService, times(1)).getAllPaymentMethods();
+  }
 }

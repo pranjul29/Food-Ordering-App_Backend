@@ -25,33 +25,35 @@ import java.util.UUID;
 @RequestMapping("/")
 public class ItemController {
 
-    @Autowired
-    ItemService itemService;
+  @Autowired ItemService itemService;
 
-    @Autowired
-    RestaurantService restaurantService;
+  @Autowired RestaurantService restaurantService;
 
-    @RequestMapping(method = RequestMethod.GET, path = "/item/restaurant/{restaurant_id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<ItemListResponse> getItemByPopularity(@PathVariable("restaurant_id") final String restaurant_id)
-            throws RestaurantNotFoundException {
+  @RequestMapping(
+      method = RequestMethod.GET,
+      path = "/item/restaurant/{restaurant_id}",
+      produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+  public ResponseEntity<ItemListResponse> getItemByPopularity(
+      @PathVariable("restaurant_id") final String restaurant_id)
+      throws RestaurantNotFoundException {
 
-        RestaurantEntity restaurantEntity = restaurantService.restaurantByUUID(restaurant_id);
+    RestaurantEntity restaurantEntity = restaurantService.restaurantByUUID(restaurant_id);
 
-//        if (restaurantEntity == null) {
-//            throw new RestaurantNotFoundException("RNF-001", "No restaurant by this id");
-//        }
-        List<ItemEntity> itemEntityList = itemService.getItemsByPopularity(restaurantEntity);
-        ItemListResponse itemListResponse = new ItemListResponse();
+    //        if (restaurantEntity == null) {
+    //            throw new RestaurantNotFoundException("RNF-001", "No restaurant by this id");
+    //        }
+    List<ItemEntity> itemEntityList = itemService.getItemsByPopularity(restaurantEntity);
+    ItemListResponse itemListResponse = new ItemListResponse();
 
-        for(ItemEntity ie: itemEntityList) {
-            ItemList itemList = new ItemList();
-            itemList.setId(UUID.fromString(ie.getUuid()));
-            itemList.setItemName(ie.getItemName());
-            itemList.setPrice(ie.getPrice());
-            itemList.setItemType(ItemList.ItemTypeEnum.valueOf(ie.getType().getValue()));
-            itemListResponse.add(itemList);
-        }
-
-        return new ResponseEntity<ItemListResponse>(itemListResponse, HttpStatus.OK);
+    for (ItemEntity ie : itemEntityList) {
+      ItemList itemList = new ItemList();
+      itemList.setId(UUID.fromString(ie.getUuid()));
+      itemList.setItemName(ie.getItemName());
+      itemList.setPrice(ie.getPrice());
+      itemList.setItemType(ItemList.ItemTypeEnum.valueOf(ie.getType().getValue()));
+      itemListResponse.add(itemList);
     }
+
+    return new ResponseEntity<ItemListResponse>(itemListResponse, HttpStatus.OK);
+  }
 }

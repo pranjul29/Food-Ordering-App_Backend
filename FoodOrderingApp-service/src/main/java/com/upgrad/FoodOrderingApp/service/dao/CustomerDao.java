@@ -11,59 +11,69 @@ import javax.persistence.NoResultException;
 @Repository
 public class CustomerDao {
 
-    @Autowired
-    private EntityManager entityManager;
+  @Autowired private EntityManager entityManager;
 
-    public CustomerEntity createCustomer(CustomerEntity customerEntity) {
-        entityManager.persist(customerEntity);
-        return customerEntity;
-    }
+  public CustomerEntity createCustomer(CustomerEntity customerEntity) {
+    entityManager.persist(customerEntity);
+    return customerEntity;
+  }
 
-    public CustomerEntity getUserByUsername(final String username) {
-        try {
-            return entityManager.createNamedQuery("userByContactNumber", CustomerEntity.class).setParameter("contact_number", username).getSingleResult();
-        } catch (NoResultException nre) {
-            return null;
-        }
+  public CustomerEntity getUserByUsername(final String username) {
+    try {
+      return entityManager
+          .createNamedQuery("userByContactNumber", CustomerEntity.class)
+          .setParameter("contact_number", username)
+          .getSingleResult();
+    } catch (NoResultException nre) {
+      return null;
     }
+  }
 
-    public CustomerAuthEntity createAccessToken(final CustomerAuthEntity customerAuthEntity){
-        entityManager.persist(customerAuthEntity);
-        return customerAuthEntity;
-    }
+  public CustomerAuthEntity createAccessToken(final CustomerAuthEntity customerAuthEntity) {
+    entityManager.persist(customerAuthEntity);
+    return customerAuthEntity;
+  }
 
-    public CustomerAuthEntity getCustomerAuthByCustomerId(final Integer customerId) {
-        try {
-            return entityManager.createNamedQuery("customerAuthByCustomerId",
-                    CustomerAuthEntity.class).setParameter("customerId", customerId).getSingleResult();
-        } catch (NoResultException nre) {
-            return null;
-        }
+  public CustomerAuthEntity getCustomerAuthByCustomerId(final Integer customerId) {
+    try {
+      return entityManager
+          .createNamedQuery("customerAuthByCustomerId", CustomerAuthEntity.class)
+          .setParameter("customerId", customerId)
+          .getSingleResult();
+    } catch (NoResultException nre) {
+      return null;
     }
+  }
 
-    public CustomerAuthEntity getCustomerAuthByAccessToken(final String accessToken){
-        try {
-            return entityManager.createNamedQuery("customerAuthByAccessToken",
-                    CustomerAuthEntity.class).setParameter("accessToken", accessToken).getSingleResult();
-        } catch (NoResultException nre){
-            return null;
-        }
+  public CustomerAuthEntity getCustomerAuthByAccessToken(final String accessToken) {
+    try {
+      return entityManager
+          .createNamedQuery("customerAuthByAccessToken", CustomerAuthEntity.class)
+          .setParameter("accessToken", accessToken)
+          .getSingleResult();
+    } catch (NoResultException nre) {
+      return null;
     }
+  }
 
-    public void updateCustomerAuth(CustomerAuthEntity preExistingCustomerAuth) {
-        entityManager.merge(preExistingCustomerAuth);
-    }
+  public void updateCustomerAuth(CustomerAuthEntity preExistingCustomerAuth) {
+    entityManager.merge(preExistingCustomerAuth);
+  }
 
-    public void updateCustomer(CustomerEntity customerEntity) {
-        entityManager.merge(customerEntity);
-    }
+  public void updateCustomer(CustomerEntity customerEntity) {
+    entityManager.merge(customerEntity);
+  }
 
-    public CustomerEntity getCustomerByUuid (final String uuid){
-        try {
-            CustomerEntity customer = entityManager.createNamedQuery("customerByUuid",CustomerEntity.class).setParameter("uuid",uuid).getSingleResult();
-            return customer;
-        }catch (NoResultException nre){
-            return null;
-        }
+  public CustomerEntity getCustomerByUuid(final String uuid) {
+    try {
+      CustomerEntity customer =
+          entityManager
+              .createNamedQuery("customerByUuid", CustomerEntity.class)
+              .setParameter("uuid", uuid)
+              .getSingleResult();
+      return customer;
+    } catch (NoResultException nre) {
+      return null;
     }
+  }
 }

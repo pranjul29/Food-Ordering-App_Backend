@@ -5,65 +5,69 @@ import javax.persistence.*;
 @Entity
 @Table(name = "order_item")
 @NamedQueries({
-
-        @NamedQuery(name = "getOrderItemsByOrder",query = "SELECT o FROM OrderItemEntity o WHERE o.orders = :orders ORDER BY o.item.itemName ASC"),
-        @NamedQuery(name = "getItemsByOrders",query = "SELECT o FROM OrderItemEntity o WHERE o.orders = :ordersEntity"),
-
+  @NamedQuery(
+      name = "getOrderItemsByOrder",
+      query =
+          "SELECT o FROM OrderItemEntity o WHERE o.orders = :orders ORDER BY o.item.itemName ASC"),
+  @NamedQuery(
+      name = "getItemsByOrders",
+      query = "SELECT o FROM OrderItemEntity o WHERE o.orders = :ordersEntity"),
 })
 public class OrderItemEntity {
-    @Id
-    @Column(name = "ID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+  @Id
+  @Column(name = "ID")
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private long id;
 
-    @ManyToOne
-    @JoinColumn(name = "order_id")
-    private OrderEntity orders;
+  @ManyToOne
+  @JoinColumn(name = "order_id")
+  private OrderEntity orders;
 
-    @ManyToOne
-    @JoinColumn(name = "item_id" , referencedColumnName = "id")
-    private ItemEntity item;
+  @ManyToOne
+  @JoinColumn(name = "item_id", referencedColumnName = "id")
+  private ItemEntity item;
 
-    @Column(name = "QUANTITY")
-    private Integer quantity;
+  @Column(name = "QUANTITY")
+  private Integer quantity;
 
-    @Column(name="PRICE")
-    private Integer price;
-    public OrderItemEntity(){}
-    public ItemEntity getItem() {
-        return item;
-    }
+  @Column(name = "PRICE")
+  private Integer price;
 
-    public void setItem(ItemEntity item) {
-        this.item = item;
-    }
+  public OrderItemEntity() {}
 
-    public void setId(long id) {
-        this.id = id;
-    }
+  public ItemEntity getItem() {
+    return item;
+  }
 
-    public OrderEntity getOrders() {
-        return orders;
-    }
+  public void setItem(ItemEntity item) {
+    this.item = item;
+  }
 
-    public void setOrders(OrderEntity orders) {
-        this.orders = orders;
-    }
+  public void setId(long id) {
+    this.id = id;
+  }
 
+  public OrderEntity getOrders() {
+    return orders;
+  }
 
-    public Integer getQuantity() {
-        return quantity;
-    }
+  public void setOrders(OrderEntity orders) {
+    this.orders = orders;
+  }
 
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
+  public Integer getQuantity() {
+    return quantity;
+  }
 
-    public Integer getPrice() {
-        return price;
-    }
+  public void setQuantity(Integer quantity) {
+    this.quantity = quantity;
+  }
 
-    public void setPrice(Integer price) {
-        this.price = price;
-    }
+  public Integer getPrice() {
+    return price;
+  }
+
+  public void setPrice(Integer price) {
+    this.price = price;
+  }
 }

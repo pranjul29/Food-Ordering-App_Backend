@@ -20,113 +20,121 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-//import javax.swing.plaf.nimbus.State;
+// import javax.swing.plaf.nimbus.State;
 
 @Service
 public class AddressService {
 
-    @Autowired
-    private AddressDao addressDao;
+  @Autowired private AddressDao addressDao;
 
-    @Autowired
-    private StateDao stateDao;
+  @Autowired private StateDao stateDao;
 
-    @Autowired
-    private CustomerAddressDao customerAddressDao;
+  @Autowired private CustomerAddressDao customerAddressDao;
 
-    public static boolean isValidPinCode(String pinCode)
-    {
+  public static boolean isValidPinCode(String pinCode) {
 
-        // Regex to check valid pin code.
-        String regex = "^[1-9]{1}[0-9]{5}";
-        // Compile the ReGex
-        Pattern p = Pattern.compile(regex);
+    // Regex to check valid pin code.
+    String regex = "^[1-9]{1}[0-9]{5}";
+    // Compile the ReGex
+    Pattern p = Pattern.compile(regex);
 
-        Matcher m = p.matcher(pinCode);
-        return m.matches();
-    }
-    @Transactional(propagation = Propagation.REQUIRED)
-    public StateEntity getStateByUUID(String stateUUID) throws SaveAddressException, AddressNotFoundException {
+    Matcher m = p.matcher(pinCode);
+    return m.matches();
+  }
 
-        if(stateUUID == null)
-            throw new SaveAddressException("SAR-001","No field can be empty");
-        StateEntity stateEntity = stateDao.getStateByUUID(stateUUID);
-        if(stateEntity == null)
-            throw new AddressNotFoundException("ANF-002","No state by this id");
+  @Transactional(propagation = Propagation.REQUIRED)
+  public StateEntity getStateByUUID(String stateUUID)
+      throws SaveAddressException, AddressNotFoundException {
 
-        return stateEntity;
-    }
+    if (stateUUID == null) throw new SaveAddressException("SAR-001", "No field can be empty");
+    StateEntity stateEntity = stateDao.getStateByUUID(stateUUID);
+    if (stateEntity == null) throw new AddressNotFoundException("ANF-002", "No state by this id");
 
-    @Transactional(propagation = Propagation.REQUIRED)
-    public AddressEntity saveAddress(AddressEntity addressEntity, StateEntity stateEntity) throws SaveAddressException {
-        if(addressEntity.getCity() == null || addressEntity.getFlatBuilNo() == null || addressEntity. getLocality() == null || addressEntity.getPincode() == null)
-            throw new SaveAddressException("SAR-001","No field can be empty");
-        else if(isValidPinCode(addressEntity.getPincode()) == false)
-            throw new SaveAddressException("SAR-002","Invalid pincode");
+    return stateEntity;
+  }
 
-        addressEntity.setState(stateEntity);
-        //CustomerAddressEntity newCustomerAddressEntity = addressDao.saveCustomerAddress(customerAddressEntity);
-        AddressEntity newAddressEntity = addressDao.saveAddress(addressEntity);
-        //customerAddressEntity.setAddressEntity(newAddressEntity);
-        //CustomerAddressEntity newCustomerAddressEntity = addressDao.saveCustomerAddress(customerAddressEntity);
-        return newAddressEntity;
-    }
+  @Transactional(propagation = Propagation.REQUIRED)
+  public AddressEntity saveAddress(AddressEntity addressEntity, StateEntity stateEntity)
+      throws SaveAddressException {
+    if (addressEntity.getCity() == null
+        || addressEntity.getFlatBuilNo() == null
+        || addressEntity.getLocality() == null
+        || addressEntity.getPincode() == null)
+      throw new SaveAddressException("SAR-001", "No field can be empty");
+    else if (isValidPinCode(addressEntity.getPincode()) == false)
+      throw new SaveAddressException("SAR-002", "Invalid pincode");
 
-    @Transactional(propagation = Propagation.REQUIRED)
-    public CustomerAddressEntity saveCustomerAddressEntity(CustomerEntity customerEntity,AddressEntity addressEntity){
+    addressEntity.setState(stateEntity);
+    // CustomerAddressEntity newCustomerAddressEntity =
+    // addressDao.saveCustomerAddress(customerAddressEntity);
+    AddressEntity newAddressEntity = addressDao.saveAddress(addressEntity);
+    // customerAddressEntity.setAddressEntity(newAddressEntity);
+    // CustomerAddressEntity newCustomerAddressEntity =
+    // addressDao.saveCustomerAddress(customerAddressEntity);
+    return newAddressEntity;
+  }
 
-        CustomerAddressEntity customerAddressEntity = new CustomerAddressEntity();
-        customerAddressEntity.setCustomerEntity(customerEntity);
-        customerAddressEntity.setAddressEntity(addressEntity);
+  @Transactional(propagation = Propagation.REQUIRED)
+  public CustomerAddressEntity saveCustomerAddressEntity(
+      CustomerEntity customerEntity, AddressEntity addressEntity) {
 
-        CustomerAddressEntity createdCustomerAddressEntity = customerAddressDao.saveCustomerAddress(customerAddressEntity);
-        return createdCustomerAddressEntity;
+    CustomerAddressEntity customerAddressEntity = new CustomerAddressEntity();
+    customerAddressEntity.setCustomerEntity(customerEntity);
+    customerAddressEntity.setAddressEntity(addressEntity);
 
-    }
+    CustomerAddressEntity createdCustomerAddressEntity =
+        customerAddressDao.saveCustomerAddress(customerAddressEntity);
+    return createdCustomerAddressEntity;
+  }
 
-    @Transactional(propagation = Propagation.REQUIRED)
-    public List<AddressEntity> getAllAddress(CustomerEntity customerEntity){
+  @Transactional(propagation = Propagation.REQUIRED)
+  public List<AddressEntity> getAllAddress(CustomerEntity customerEntity) {
 
-        List<AddressEntity> addressEntities = new ArrayList<>();
-        List<CustomerAddressEntity> customerAddressEntities = customerAddressDao.getAllAddressByCustomer(customerEntity);
+    List<AddressEntity> addressEntities = new ArrayList<>();
+    List<CustomerAddressEntity> customerAddressEntities =
+        customerAddressDao.getAllAddressByCustomer(customerEntity);
 
-        if(customerAddressEntities!=null)
-            customerAddressEntities.forEach(customerAddressEntity -> {
-                addressEntities.add(customerAddressEntity.getAddressEntity());
-            });
+    if (customerAddressEntities != null)
+      customerAddressEntities.forEach(
+          customerAddressEntity -> {
+            addressEntities.add(customerAddressEntity.getAddressEntity());
+          });
 
-        return addressEntities;
-    }
+    return addressEntities;
+  }
 
-    public AddressEntity getAddressByUUID(String addressUuid,CustomerEntity customerEntity) throws AddressNotFoundException, AuthorizationFailedException {
+  public AddressEntity getAddressByUUID(String addressUuid, CustomerEntity customerEntity)
+      throws AddressNotFoundException, AuthorizationFailedException {
 
-        if(addressUuid == null)
-            throw new AddressNotFoundException("ANF-005","Address id can not be empty");
+    if (addressUuid == null)
+      throw new AddressNotFoundException("ANF-005", "Address id can not be empty");
 
-        AddressEntity addressEntity = addressDao.getAddressByUUID(addressUuid);
-        if(addressEntity == null)
-            throw new AddressNotFoundException("ANF-003","No address by this id");
+    AddressEntity addressEntity = addressDao.getAddressByUUID(addressUuid);
+    if (addressEntity == null)
+      throw new AddressNotFoundException("ANF-003", "No address by this id");
 
-        CustomerAddressEntity customerAddressEntity = customerAddressDao.getCustomerAddressByAddress(addressEntity);
-        if(customerAddressEntity.getCustomerEntity().getUuid() != customerEntity.getUuid())
-            throw new AuthorizationFailedException("ATHR-004","You are not authorized to view/update/delete any one else's address");
+    CustomerAddressEntity customerAddressEntity =
+        customerAddressDao.getCustomerAddressByAddress(addressEntity);
+    if (customerAddressEntity.getCustomerEntity().getUuid() != customerEntity.getUuid())
+      throw new AuthorizationFailedException(
+          "ATHR-004", "You are not authorized to view/update/delete any one else's address");
 
-        return addressEntity;
+    return addressEntity;
+  }
 
-    }
+  @Transactional(propagation = Propagation.REQUIRED)
+  public AddressEntity deleteAddress(AddressEntity addressEntity) {
+    AddressEntity deletedAddressEntity = addressDao.deleteAddress(addressEntity);
+    return deletedAddressEntity;
+  }
 
-    @Transactional(propagation = Propagation.REQUIRED)
-    public AddressEntity deleteAddress(AddressEntity addressEntity) {
-        AddressEntity deletedAddressEntity = addressDao.deleteAddress(addressEntity);
-        return deletedAddressEntity;
-    }
+  public List<StateEntity> getAllStates() {
+    List<StateEntity> stateEntities = stateDao.getAllStates();
+    return stateEntities;
+  }
 
-    public List<StateEntity> getAllStates() {
-        List<StateEntity> stateEntities = stateDao.getAllStates();
-        return stateEntities;
-    }
-
-    public CustomerAddressEntity getCustomerAddress(CustomerEntity customerEntity, final AddressEntity addressEntity) {
-        return addressDao.getCustomerAddress(customerEntity,addressEntity);
-    }
+  public CustomerAddressEntity getCustomerAddress(
+      CustomerEntity customerEntity, final AddressEntity addressEntity) {
+    return addressDao.getCustomerAddress(customerEntity, addressEntity);
+  }
 }

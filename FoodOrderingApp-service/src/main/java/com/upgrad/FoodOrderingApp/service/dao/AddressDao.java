@@ -12,51 +12,60 @@ import javax.persistence.NoResultException;
 @Repository
 public class AddressDao {
 
-    @Autowired
-    private EntityManager entityManager;
+  @Autowired private EntityManager entityManager;
 
-//    public StateEntity getStateByUUID(String stateUUID){
-//        try {
-//            return entityManager
-//                    .createNamedQuery("stateByUUID", StateEntity.class)
-//                    .setParameter("uuid", stateUUID)
-//                    .getSingleResult();
-//        } catch (NoResultException ex) {
-//            return null;
-//        }
-//    }
+  //    public StateEntity getStateByUUID(String stateUUID){
+  //        try {
+  //            return entityManager
+  //                    .createNamedQuery("stateByUUID", StateEntity.class)
+  //                    .setParameter("uuid", stateUUID)
+  //                    .getSingleResult();
+  //        } catch (NoResultException ex) {
+  //            return null;
+  //        }
+  //    }
 
-//    public CustomerAddressEntity saveCustomerAddress(CustomerAddressEntity customerAddressEntity){
-//        entityManager.persist(customerAddressEntity);
-//        return customerAddressEntity;
-//    }
+  //    public CustomerAddressEntity saveCustomerAddress(CustomerAddressEntity
+  // customerAddressEntity){
+  //        entityManager.persist(customerAddressEntity);
+  //        return customerAddressEntity;
+  //    }
 
-    public AddressEntity saveAddress(AddressEntity addressEntity){
-        entityManager.persist(addressEntity);
-        return addressEntity;
+  public AddressEntity saveAddress(AddressEntity addressEntity) {
+    entityManager.persist(addressEntity);
+    return addressEntity;
+  }
+
+  public AddressEntity getAddressByUUID(String addressUuid) {
+    try {
+      AddressEntity addressEntity =
+          entityManager
+              .createNamedQuery("getAddressByUuid", AddressEntity.class)
+              .setParameter("uuid", addressUuid)
+              .getSingleResult();
+      return addressEntity;
+    } catch (NoResultException nre) {
+      return null;
     }
+  }
 
-    public AddressEntity getAddressByUUID(String addressUuid) {
-        try{
-            AddressEntity addressEntity = entityManager.createNamedQuery("getAddressByUuid",AddressEntity.class).setParameter("uuid",addressUuid).getSingleResult();
-            return addressEntity;
-        }catch (NoResultException nre){
-            return null;
-        }
-    }
+  public AddressEntity deleteAddress(AddressEntity addressEntity) {
+    entityManager.remove(addressEntity);
+    return addressEntity;
+  }
 
-    public AddressEntity deleteAddress(AddressEntity addressEntity) {
-        entityManager.remove(addressEntity);
-        return addressEntity;
+  public CustomerAddressEntity getCustomerAddress(
+      CustomerEntity customerEntity, final AddressEntity addressEntity) {
+    try {
+      return entityManager
+          .createNamedQuery(
+              "CustomerAddressEntity.getCustomerAddressByAddressEntity",
+              CustomerAddressEntity.class)
+          .setParameter("customer", customerEntity)
+          .setParameter("address", addressEntity)
+          .getSingleResult();
+    } catch (NoResultException nre) {
+      return null;
     }
-
-    public CustomerAddressEntity getCustomerAddress(CustomerEntity customerEntity, final AddressEntity addressEntity) {
-        try {
-            return entityManager.createNamedQuery("CustomerAddressEntity.getCustomerAddressByAddressEntity", CustomerAddressEntity.class)
-                    .setParameter("customer", customerEntity).setParameter( "address", addressEntity)
-                    .getSingleResult();
-        } catch(NoResultException nre) {
-            return null;
-        }
-    }
+  }
 }

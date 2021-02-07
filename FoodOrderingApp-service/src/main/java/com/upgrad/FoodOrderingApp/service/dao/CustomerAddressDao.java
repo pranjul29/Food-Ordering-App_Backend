@@ -13,31 +13,34 @@ import java.util.List;
 @Repository
 public class CustomerAddressDao {
 
-    @Autowired
-    private EntityManager entityManager;
+  @Autowired private EntityManager entityManager;
 
-    public List<CustomerAddressEntity> getAllAddressByCustomer(final CustomerEntity customerEntity) {
-        try {
-            return entityManager
-                    .createNamedQuery("allAddressByCustomer", CustomerAddressEntity.class)
-                    .setParameter("customerEntity", customerEntity)
-                    .getResultList();
-        } catch (NoResultException nre) {
-            return null;
-        }
+  public List<CustomerAddressEntity> getAllAddressByCustomer(final CustomerEntity customerEntity) {
+    try {
+      return entityManager
+          .createNamedQuery("allAddressByCustomer", CustomerAddressEntity.class)
+          .setParameter("customerEntity", customerEntity)
+          .getResultList();
+    } catch (NoResultException nre) {
+      return null;
     }
+  }
 
-    public CustomerAddressEntity getCustomerAddressByAddress(AddressEntity addressEntity) {
-        try {
-            CustomerAddressEntity customerAddressEntity = entityManager.createNamedQuery("getCustomerAddressByAddress",CustomerAddressEntity.class).setParameter("addressEntity",addressEntity).getSingleResult();
-            return customerAddressEntity;
-        }catch (NoResultException nre){
-            return null;
-        }
+  public CustomerAddressEntity getCustomerAddressByAddress(AddressEntity addressEntity) {
+    try {
+      CustomerAddressEntity customerAddressEntity =
+          entityManager
+              .createNamedQuery("getCustomerAddressByAddress", CustomerAddressEntity.class)
+              .setParameter("addressEntity", addressEntity)
+              .getSingleResult();
+      return customerAddressEntity;
+    } catch (NoResultException nre) {
+      return null;
     }
+  }
 
-    public CustomerAddressEntity saveCustomerAddress(CustomerAddressEntity customerAddressEntity){
-        entityManager.persist(customerAddressEntity);
-        return customerAddressEntity;
-    }
+  public CustomerAddressEntity saveCustomerAddress(CustomerAddressEntity customerAddressEntity) {
+    entityManager.persist(customerAddressEntity);
+    return customerAddressEntity;
+  }
 }
