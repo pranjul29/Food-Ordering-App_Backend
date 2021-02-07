@@ -27,7 +27,7 @@ public class CustomerService {
     public CustomerEntity saveCustomer(CustomerEntity customerEntity) throws SignUpRestrictedException {
         String validEmailFormat = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
         String validContactNumber = "^(?=.*[0-9])D*\\d{10}\\D*$";
-        if(customerEntity.getFirstName() == null || customerEntity.getEmail() == null || customerEntity.getContact_number() == null || customerEntity.getPassword() == null)
+        if(customerEntity.getFirstName() == null || customerEntity.getEmail() == null || customerEntity.getContact_number() == null || customerEntity.getPassword() == null || customerEntity.getEmail() == "")
             throw new  SignUpRestrictedException("SGR-005", "Except last name all fields should be filled");
         else if(customerDao.getUserByUsername(customerEntity.getContact_number()) != null)
             throw new SignUpRestrictedException("SGR-001", "This contact number is already registered! Try other contact number.");

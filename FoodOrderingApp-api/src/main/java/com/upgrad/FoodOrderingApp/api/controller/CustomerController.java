@@ -31,7 +31,7 @@ public class CustomerController {
     private PasswordCryptographyProvider passwordCryptographyProvider;
 
     @RequestMapping(method = RequestMethod.POST, path = "/customer/signup", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<SignupCustomerResponse> signup(final SignupCustomerRequest signupCustomerRequest) throws SignUpRestrictedException {
+    public ResponseEntity<SignupCustomerResponse> signup(@RequestBody(required = false) final SignupCustomerRequest signupCustomerRequest) throws SignUpRestrictedException {
 
         final CustomerEntity customerEntity = new CustomerEntity();
         customerEntity.setUuid(UUID.randomUUID().toString());
@@ -41,6 +41,8 @@ public class CustomerController {
         customerEntity.setEmail(signupCustomerRequest.getEmailAddress());
         customerEntity.setPassword(signupCustomerRequest.getPassword());
 
+        if(signupCustomerRequest.getEmailAddress() =="")
+            throw new  SignUpRestrictedException("SGR-005", "Except last name all fields should be filled");
         final CustomerEntity createdCustomerEntity = customerService.saveCustomer(customerEntity);
         SignupCustomerResponse signupCustomerResponse = new SignupCustomerResponse().id(createdCustomerEntity.getUuid()).status("CUSTOMER SUCCESSFULLY REGISTERED");
 
@@ -79,13 +81,16 @@ public class CustomerController {
     }
 
     @RequestMapping(method = RequestMethod.PUT, path = "/customer", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<UpdateCustomerResponse> update(@RequestHeader("authorization") final String authorization, UpdateCustomerRequest updateCustomerRequest) throws UpdateCustomerException, AuthorizationFailedException {
+    public ResponseEntity<UpdateCustomerResponse> update(@RequestHeader("authorization") final String authorization,@RequestBody(required = false) UpdateCustomerRequest updateCustomerRequest) throws UpdateCustomerException, AuthorizationFailedException {
 
+        String firstname = updateCustomerRequest.getFirstName();
+        if(firstname == null || firstname =="")
+            throw new UpdateCustomerException("UCR-002", "First name field should not be empty");
         String accessToken = authorization.split("Bearer ")[1];
         CustomerEntity customerEntity = customerService.getCustomer(accessToken);
 
-        String firstname = updateCustomerRequest.getFirstName();
-        if(firstname != null)
+
+        if(firstname != null || firstname=="")
             customerEntity.setFirstName(firstname);
 
         String lastname = updateCustomerRequest.getLastName();
