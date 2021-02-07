@@ -30,7 +30,10 @@ public class CustomerService {
         || customerEntity.getEmail() == null
         || customerEntity.getContact_number() == null
         || customerEntity.getPassword() == null
-        || customerEntity.getEmail().equals("") || customerEntity.getFirstName().equals("") || customerEntity.getContact_number().equals("") || customerEntity.getPassword().equals(""))
+        || customerEntity.getEmail().equals("")
+        || customerEntity.getFirstName().equals("")
+        || customerEntity.getContact_number().equals("")
+        || customerEntity.getPassword().equals(""))
       throw new SignUpRestrictedException(
           "SGR-005", "Except last name all fields should be filled");
     else if (customerDao.getUserByUsername(customerEntity.getContact_number()) != null)
@@ -123,7 +126,10 @@ public class CustomerService {
       String oldPassword, String newPassword, CustomerEntity customerEntity)
       throws UpdateCustomerException {
 
-    if (oldPassword == null || newPassword == null || oldPassword.equals("") || newPassword.equals(""))
+    if (oldPassword == null
+        || newPassword == null
+        || oldPassword.equals("")
+        || newPassword.equals(""))
       throw new UpdateCustomerException("UCR-003", "No field should be empty");
 
     // check old password validity

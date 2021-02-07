@@ -46,7 +46,8 @@ public class AddressService {
   public StateEntity getStateByUUID(String stateUUID)
       throws SaveAddressException, AddressNotFoundException {
 
-    if (stateUUID == null || stateUUID.equals("")) throw new SaveAddressException("SAR-001", "No field can be empty");
+    if (stateUUID == null || stateUUID.equals(""))
+      throw new SaveAddressException("SAR-001", "No field can be empty");
     StateEntity stateEntity = stateDao.getStateByUUID(stateUUID);
     if (stateEntity == null) throw new AddressNotFoundException("ANF-002", "No state by this id");
 
@@ -59,10 +60,11 @@ public class AddressService {
     if (addressEntity.getCity() == null
         || addressEntity.getFlatBuilNo() == null
         || addressEntity.getLocality() == null
-        || addressEntity.getPincode() == null || addressEntity.getCity().equals("")
-            || addressEntity.getFlatBuilNo().equals("")
-            || addressEntity.getLocality().equals("")
-            || addressEntity.getPincode().equals(""))
+        || addressEntity.getPincode() == null
+        || addressEntity.getCity().equals("")
+        || addressEntity.getFlatBuilNo().equals("")
+        || addressEntity.getLocality().equals("")
+        || addressEntity.getPincode().equals(""))
       throw new SaveAddressException("SAR-001", "No field can be empty");
     else if (!isValidPinCode(addressEntity.getPincode()))
       throw new SaveAddressException("SAR-002", "Invalid pincode");

@@ -31,6 +31,7 @@ public class CategoryEntity implements Serializable {
 
   @Column(name = "CATEGORY_NAME")
   private String categoryName;
+
   @OneToMany(mappedBy = "category")
   private List<CategoryItemEntity> categoryItems;
   // bi-directional many-to-one association to RestaurantCategory

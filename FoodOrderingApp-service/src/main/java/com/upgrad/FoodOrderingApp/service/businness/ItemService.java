@@ -88,7 +88,7 @@ public class ItemService {
     Map<String, Integer> itemCountMap = new HashMap<String, Integer>();
     itemEntities.forEach(
         itemEntity -> { // Looping in to count the frequency of Item ordered correspondingly
-                        // updating the count.
+          // updating the count.
           Integer count = itemCountMap.get(itemEntity.getUuid());
           itemCountMap.put(itemEntity.getUuid(), (count == null) ? 1 : count + 1);
         });
