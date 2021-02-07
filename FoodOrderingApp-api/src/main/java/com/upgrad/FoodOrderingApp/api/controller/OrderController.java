@@ -18,9 +18,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
-
-// Order Controller Handles all  the Order related endpoints
-
 @CrossOrigin
 @RestController
 @RequestMapping("/order")
@@ -146,35 +143,74 @@ public class OrderController {
                             .price(orderItemEntity.getPrice());
                     itemQuantityResponseList.add(itemQuantityResponse);
                 });
-                OrderListAddressState orderListAddressState = new OrderListAddressState()
-                        .id(UUID.fromString(ordersEntity.getAddress().getState().getUuid()))
-                        .stateName(ordersEntity.getAddress().getState().getState_name());
+                OrderListAddressState orderListAddressState = new OrderListAddressState();
+                try
+                {
+                    orderListAddressState.setId(UUID.fromString(ordersEntity.getAddress().getState().getUuid()));
+                    orderListAddressState.stateName(ordersEntity.getAddress().getState().getState_name());
+                }
+                catch (Exception e)
+                {
+                    orderListAddressState.setId(null);
+                    orderListAddressState.stateName(null);
+                }
 
-                OrderListAddress orderListAddress = new OrderListAddress()
+                OrderListAddress orderListAddress = new OrderListAddress();
+                try{
+                        orderListAddress
                         .id(UUID.fromString(ordersEntity.getAddress().getUuid()))
                         .flatBuildingName(ordersEntity.getAddress().getFlatBuilNo())
                         .locality(ordersEntity.getAddress().getLocality())
                         .city(ordersEntity.getAddress().getCity())
                         .pincode(ordersEntity.getAddress().getPincode())
                         .state(orderListAddressState);
+                        }
+                catch (Exception e){
+                    orderListAddress
+                            .id(null)
+                            .flatBuildingName(null)
+                            .locality(null)
+                            .city(null)
+                            .pincode(null)
+                            .state(null);
+                }
 
-                OrderListCoupon orderListCoupon = new OrderListCoupon()
+                OrderListCoupon orderListCoupon = new OrderListCoupon();
+                try{
+                        orderListCoupon
                         .couponName(ordersEntity.getCoupon().getCouponName())
                         .id(UUID.fromString(ordersEntity.getCoupon().getUuid()))
                         .percent(ordersEntity.getCoupon().getPercent());
+                }
+                catch (Exception e){
+                    orderListCoupon.id(null).couponName(null).percent(null);
+                }
 
-                OrderListCustomer orderListCustomer = new OrderListCustomer()
+                OrderListCustomer orderListCustomer = new OrderListCustomer();
+                try{
+                    orderListCustomer
                         .id(UUID.fromString(ordersEntity.getCustomer().getUuid()))
                         .firstName(ordersEntity.getCustomer().getFirstName())
                         .lastName(ordersEntity.getCustomer().getLastName())
                         .emailAddress(ordersEntity.getCustomer().getEmail())
                         .contactNumber(ordersEntity.getCustomer().getContact_number());
+                }
+                catch (Exception e){
+                    orderListCustomer.id(null).firstName(null).lastName(null).emailAddress(null).contactNumber(null);
+                }
 
-                OrderListPayment orderListPayment = new OrderListPayment()
+                OrderListPayment orderListPayment = new OrderListPayment();
+                try{
+                    orderListPayment
                         .id(UUID.fromString(ordersEntity.getPayment().getUuid()))
                         .paymentName(ordersEntity.getPayment().getPaymentName());
-
-                OrderList orderList = new OrderList()
+                }
+                catch (Exception e){
+                    orderListPayment.id(null).paymentName(null);
+                }
+                OrderList orderList = new OrderList();
+                try{
+                        orderList
                         .id(UUID.fromString(ordersEntity.getUuid()))
                         .itemQuantities(itemQuantityResponseList)
                         .address(orderListAddress)
@@ -184,6 +220,19 @@ public class OrderController {
                         .coupon(orderListCoupon)
                         .customer(orderListCustomer)
                         .payment(orderListPayment);
+                }
+                catch (Exception e){
+                    orderList
+                            .id(null)
+                            .itemQuantities(itemQuantityResponseList)
+                            .address(orderListAddress)
+                            .bill(BigDecimal.valueOf(ordersEntity.getBill()))
+                            .date(null)
+                            .discount(BigDecimal.valueOf(ordersEntity.getDiscount()))
+                            .coupon(orderListCoupon)
+                            .customer(orderListCustomer)
+                            .payment(orderListPayment);
+                }
                 orderLists.add(orderList);
             }
 

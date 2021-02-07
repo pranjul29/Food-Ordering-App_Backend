@@ -34,7 +34,7 @@ public class StateEntity {
     public StateEntity(@NotNull @Size(max = 200) String uuid, @NotNull @Size(max = 30) String state_name) {
         this.uuid = uuid;
         this.state_name = state_name;
-        return;
+       // return;
     }
 
     public Integer getId() {
