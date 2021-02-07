@@ -46,13 +46,13 @@ public class AddressEntity {
     private Integer active = 1;
 
     public AddressEntity(String addressId, String s, String someLocality, String someCity, String s1, StateEntity stateEntity) {
-        this.uuid = uuid;
+        this.uuid = addressId;
         this.flat_buil_number =s;
         this.locality = someLocality;
         this.city = someCity;
         this.pincode = s1;
         this.stateEntity = stateEntity;
-        return;
+        //return;
     }
 
     public AddressEntity() {
