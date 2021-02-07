@@ -46,7 +46,7 @@ public class AddressService {
   public StateEntity getStateByUUID(String stateUUID)
       throws SaveAddressException, AddressNotFoundException {
 
-    if (stateUUID == null) throw new SaveAddressException("SAR-001", "No field can be empty");
+    if (stateUUID == null || stateUUID.equals("")) throw new SaveAddressException("SAR-001", "No field can be empty");
     StateEntity stateEntity = stateDao.getStateByUUID(stateUUID);
     if (stateEntity == null) throw new AddressNotFoundException("ANF-002", "No state by this id");
 
@@ -59,19 +59,21 @@ public class AddressService {
     if (addressEntity.getCity() == null
         || addressEntity.getFlatBuilNo() == null
         || addressEntity.getLocality() == null
-        || addressEntity.getPincode() == null)
+        || addressEntity.getPincode() == null || addressEntity.getCity().equals("")
+            || addressEntity.getFlatBuilNo().equals("")
+            || addressEntity.getLocality().equals("")
+            || addressEntity.getPincode().equals(""))
       throw new SaveAddressException("SAR-001", "No field can be empty");
-    else if (isValidPinCode(addressEntity.getPincode()) == false)
+    else if (!isValidPinCode(addressEntity.getPincode()))
       throw new SaveAddressException("SAR-002", "Invalid pincode");
 
     addressEntity.setState(stateEntity);
     // CustomerAddressEntity newCustomerAddressEntity =
     // addressDao.saveCustomerAddress(customerAddressEntity);
-    AddressEntity newAddressEntity = addressDao.saveAddress(addressEntity);
     // customerAddressEntity.setAddressEntity(newAddressEntity);
     // CustomerAddressEntity newCustomerAddressEntity =
     // addressDao.saveCustomerAddress(customerAddressEntity);
-    return newAddressEntity;
+    return addressDao.saveAddress(addressEntity);
   }
 
   @Transactional(propagation = Propagation.REQUIRED)
@@ -82,9 +84,7 @@ public class AddressService {
     customerAddressEntity.setCustomerEntity(customerEntity);
     customerAddressEntity.setAddressEntity(addressEntity);
 
-    CustomerAddressEntity createdCustomerAddressEntity =
-        customerAddressDao.saveCustomerAddress(customerAddressEntity);
-    return createdCustomerAddressEntity;
+    return customerAddressDao.saveCustomerAddress(customerAddressEntity);
   }
 
   @Transactional(propagation = Propagation.REQUIRED)
@@ -106,7 +106,7 @@ public class AddressService {
   public AddressEntity getAddressByUUID(String addressUuid, CustomerEntity customerEntity)
       throws AddressNotFoundException, AuthorizationFailedException {
 
-    if (addressUuid == null)
+    if (addressUuid == null || addressUuid.equals(""))
       throw new AddressNotFoundException("ANF-005", "Address id can not be empty");
 
     AddressEntity addressEntity = addressDao.getAddressByUUID(addressUuid);
